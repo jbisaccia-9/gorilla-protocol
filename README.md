@@ -15,6 +15,8 @@ with modern desktop and touch controls.
 
 ## Play
 
+**[Play Gorilla Golden Eye in your browser](https://jbisaccia-9.github.io/gorilla-golden-eye/)**
+
 Open `gorilla-golden-eye-standalone.html` directly, or serve the repository:
 
 ```bash
