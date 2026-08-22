@@ -1,0 +1,93 @@
+<!doctype html>
+<html lang="it">
+  <head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+    <meta name="theme-color" content="#0b1411">
+    <title>Gorilla Golden Eye: Operazione Banana</title>
+    <link rel="stylesheet" href="./styles.css">
+  </head>
+  <body>
+    <main class="game-shell" aria-label="Gorilla Golden Eye">
+      <canvas id="game" width="960" height="540" aria-label="Gioco sparatutto in prima persona"></canvas>
+
+      <header class="hud" aria-label="Stato missione">
+        <section class="hud__mission">
+          <span class="hud__kicker">SERVIZIO SEGRETO PRIMATE</span>
+          <strong id="levelName">PORTO NEBBIA</strong>
+          <span id="objective">Recupera i documenti e neutralizza le guardie.</span>
+        </section>
+
+        <section class="hud__status">
+          <div class="status-block health-block">
+            <span>SALUTE</span>
+            <strong id="health">100</strong>
+            <i class="meter"><b id="healthBar"></b></i>
+          </div>
+          <div class="status-block">
+            <span>CARICATORE</span>
+            <strong><b id="ammo">12</b><small>/12</small></strong>
+          </div>
+          <div class="status-block">
+            <span>GUARDIE</span>
+            <strong id="guards">0</strong>
+          </div>
+          <div class="status-block intel-block">
+            <span>DOCUMENTI</span>
+            <strong id="intel">NO</strong>
+          </div>
+        </section>
+
+        <nav class="hud__actions" aria-label="Comandi di gioco">
+          <button class="icon-button" id="muteButton" type="button" aria-label="Disattiva audio" aria-pressed="false" title="Audio">&#128266;</button>
+          <button class="icon-button" id="pauseButton" type="button" aria-label="Pausa" title="Pausa">&#10074;&#10074;</button>
+        </nav>
+      </header>
+
+      <div class="crosshair" id="crosshair" aria-hidden="true"><i></i><i></i><i></i><i></i></div>
+      <div class="hit-marker" id="hitMarker" aria-hidden="true"></div>
+      <div class="damage-flash" id="damageFlash" aria-hidden="true"></div>
+
+      <section class="dialogue" id="dialogue" aria-live="polite">
+        <span>GORI KONGO</span>
+        <p id="dialogueText">“Agente Kongo al rapporto. Parlo solo italiano.”</p>
+      </section>
+
+      <section class="overlay is-visible" id="overlay" aria-live="polite">
+        <div class="overlay__panel">
+          <span class="overlay__kicker" id="overlayKicker">OPERAZIONE BANANA D'ORO</span>
+          <h1 id="overlayTitle">Gorilla Golden Eye</h1>
+          <p id="overlayText">Recupera i documenti. Neutralizza le guardie. Esci con eleganza.</p>
+          <button class="primary-button" id="startButton" type="button">AVVIA MISSIONE</button>
+          <span class="overlay__controls">WASD · MOUSE · CLIC/SPAZIO · R RICARICA</span>
+        </div>
+      </section>
+
+      <section class="overlay pause-overlay" id="pauseOverlay" role="dialog" aria-modal="true" aria-labelledby="pauseTitle" aria-hidden="true" hidden inert>
+        <div class="overlay__panel">
+          <span class="overlay__kicker">TRASMISSIONE SOSPESA</span>
+          <h2 id="pauseTitle">Pausa tattica</h2>
+          <p>La missione aspetta. Le banane no.</p>
+          <div class="overlay__actions">
+            <button class="primary-button" id="resumeButton" type="button">RIPRENDI</button>
+            <button class="secondary-button" id="restartButton" type="button">RICOMINCIA</button>
+          </div>
+        </div>
+      </section>
+
+      <section class="touch-controls" id="touchControls" aria-label="Comandi touch">
+        <div class="move-pad" id="movePad" aria-label="Movimento">
+          <span class="move-stick" id="moveStick"></span>
+        </div>
+        <div class="look-zone" id="lookZone" aria-label="Visuale"></div>
+        <button class="touch-button touch-button--reload" id="touchReload" type="button" aria-label="Ricarica">R</button>
+        <button class="touch-button touch-button--fire" id="touchFire" type="button" aria-label="Spara">&#9678;</button>
+      </section>
+
+      <p class="sr-only" id="statusRegion" role="status" aria-live="polite" aria-atomic="true"></p>
+    </main>
+
+    <script src="./audio.js"></script>
+    <script src="./game.js"></script>
+  </body>
+</html>
