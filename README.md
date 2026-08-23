@@ -52,6 +52,10 @@ node build-standalone.js
 The game runs entirely in the browser. It contains no analytics, credentials,
 personal data, external API integrations, or runtime network requests.
 
+## License
+
+Released under the [MIT License](LICENSE). Copyright (c) 2026 Joseph Bisaccia.
+
 ## Project Layout
 
 - `index.html`, `styles.css`: page structure and interface
