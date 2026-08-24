@@ -1,0 +1,58 @@
+name: gorilla-protocol-stream
+
+services:
+  edge:
+    image: caddy:2.10.2-alpine@sha256:4c6e91c6ed0e2fa03efd5b44747b625fec79bc9cd06ac5235a779726618e530d
+    network_mode: host
+    restart: unless-stopped
+    env_file: .env
+    volumes:
+      - ./Caddyfile:/etc/caddy/Caddyfile:ro
+      - caddy_data:/data
+      - caddy_config:/config
+    depends_on:
+      - signalling
+
+  signalling:
+    build:
+      context: ${PIXEL_STREAMING_INFRA_DIR:-./.cache/PixelStreamingInfrastructure}
+      dockerfile: SignallingWebServer/Dockerfile
+    network_mode: host
+    restart: unless-stopped
+    command:
+      - --nosudo
+      - --publicip
+      - ${PUBLIC_IP:?Set PUBLIC_IP in Hosting/.env}
+      - --
+      - --player_port
+      - "8080"
+      - --streamer_port
+      - "8888"
+      - --max_players
+      - "1"
+      - --peer_options_file
+      - /run/pixel-streaming/peer-options.json
+      - --turn_secret_file
+      - /run/secrets/turn-secret
+      - --turn_ttl
+      - ${TURN_TTL:-3600}
+      - --reverse-proxy
+      - --reverse-proxy-num-proxies
+      - "1"
+    volumes:
+      - ./runtime/peer-options.json:/run/pixel-streaming/peer-options.json:ro
+      - ./runtime/secrets/turn-secret:/run/secrets/turn-secret:ro
+
+  turn:
+    image: coturn/coturn:4.17.2-r0@sha256:aa68aab64a3b929d57fc2924c98ea447bf996cf8dade2508e7b71eaf23f1f14e
+    network_mode: host
+    restart: unless-stopped
+    command:
+      - -c
+      - /etc/coturn/turnserver.conf
+    volumes:
+      - ./runtime/turnserver.conf:/etc/coturn/turnserver.conf:ro
+
+volumes:
+  caddy_data:
+  caddy_config:

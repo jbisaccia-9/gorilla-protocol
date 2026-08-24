@@ -15,6 +15,8 @@ required=(
   Source/GorillaProtocol/Game/GPGameMode.cpp
   Source/GorillaProtocol/Characters/GPAgentCharacter.cpp
   Source/GorillaProtocol/AI/GPGuardAIController.cpp
+  Hosting/docker-compose.yml
+  Hosting/bin/validate_hosting.sh
   Licenses/AssetManifest.csv
 )
 
@@ -52,5 +54,7 @@ done < <(find Content -type f \( -iname '*.uasset' -o -iname '*.umap' -o -iname 
 if [[ ! -s Content/GorillaProtocol/Maps/L_Boot.umap ]]; then
   echo "Notice: L_Boot.umap has not been generated; run Scripts/bootstrap_project.sh after installing UE5.8." >&2
 fi
+
+./Hosting/bin/validate_hosting.sh
 
 echo "Gorilla Protocol source validation passed."

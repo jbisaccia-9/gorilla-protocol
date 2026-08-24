@@ -1,0 +1,16 @@
+name: Validate
+
+on:
+  push:
+  pull_request:
+
+permissions:
+  contents: read
+
+jobs:
+  source-and-hosting:
+    runs-on: ubuntu-24.04
+    steps:
+      - uses: actions/checkout@v4
+      - name: Validate project and hosting scaffold
+        run: ./Scripts/validate_project.sh

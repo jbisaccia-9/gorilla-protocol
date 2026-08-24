@@ -16,3 +16,6 @@ Artifacts/
 .DS_Store
 Content/Developers/
 Collections/
+Hosting/.cache/
+Hosting/.env
+Hosting/runtime/

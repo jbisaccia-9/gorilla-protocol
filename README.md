@@ -9,10 +9,12 @@ The protagonist is Agent Bruno, an original gorilla operative whose spoken
 dialogue is Italian. This project is not affiliated with GoldenEye, Donkey Kong,
 Nintendo, Rare, MGM, EON Productions, Sony, or Microsoft.
 
-[![Play Now](https://img.shields.io/badge/PLAY_NOW-Browser_Companion-1f7a4d?style=for-the-badge&logo=googlechrome&logoColor=white)](https://jbisaccia-9.github.io/gorilla-golden-eye/)
+[![Play Legacy WebGL](https://img.shields.io/badge/PLAY-Legacy_WebGL-1f7a4d?style=for-the-badge&logo=googlechrome&logoColor=white)](https://jbisaccia-9.github.io/gorilla-golden-eye/)
+[![UE5 Stream](https://img.shields.io/badge/UE5_STREAM-Host_Setup_Required-8b3a2e?style=for-the-badge&logo=unrealengine&logoColor=white)](Hosting/README.md)
 
-The Play Now link opens the hosted browser companion. It is the legacy WebGL
-prototype, not a streamed build of this Unreal Engine project.
+The playable link opens the legacy WebGL prototype. It cannot display changes
+from this Unreal project. The UE5 stream requires the GPU deployment documented
+under `Hosting/`.
 
 ## Current Status
 
@@ -30,6 +32,8 @@ It provides:
 - Italian protagonist dialogue hooks for recorded voice and localized subtitles
 - Automated smoke-test scaffolding, offline validation, scalability profiles,
   Git LFS rules, and asset-license tracking
+- Pixel Streaming 2 integration plus a pinned UE5.8 signaling, HTTPS, and TURN
+  deployment stack for a Linux GPU host
 
 The runtime arena uses Engine basic shapes only so the source project can boot
 without Marketplace content. Those shapes are test proxies and must be replaced
@@ -71,7 +75,8 @@ this machine until storage and toolchain prerequisites are addressed.
 1. Install Unreal Engine 5.8 and full Xcode or Visual Studio.
 2. Install Git LFS and run `git lfs install`.
 3. Set `UE_ROOT`, then run `./Scripts/build_editor.sh` to compile the C++ module.
-4. Run `./Scripts/bootstrap_project.sh` once to generate the project-owned
+4. Run `./Scripts/bootstrap_project.sh` on macOS/Linux or
+   `Scripts/bootstrap_project.ps1` on Windows once to generate the project-owned
    `L_Boot.umap` with a Player Start and switch the startup map configuration.
 5. Commit the generated map through Git LFS.
 6. Open `GorillaProtocol.uproject` and press Play. The global game mode creates
@@ -87,11 +92,26 @@ export UE_ROOT="/path/to/UE_5.8"
 ./Scripts/package_mac.sh
 ```
 
+Shipping builds for Pixel Streaming use `Scripts/package_linux.sh` or
+`Scripts/package_windows.ps1` on the corresponding UE5.8 build machine.
+
 Source-only validation does not require Unreal:
 
 ```bash
 ./Scripts/validate_project.sh
 ```
+
+## Browser Streaming
+
+The UE5 build is designed to run in a browser through Pixel Streaming 2. Epic
+provides the streaming plugin and reference infrastructure, but not a hosted GPU
+instance. See [`Hosting/README.md`](Hosting/README.md) for the complete deployment
+topology, firewall rules, secure TURN setup, packaging commands, and remaining
+cloud inputs.
+
+There is no public UE5 stream yet because this repository has not been packaged
+and no paid GPU host or DNS endpoint has been supplied. The old GitHub Pages game
+is a separate WebGL codebase.
 
 ## Controls
 
