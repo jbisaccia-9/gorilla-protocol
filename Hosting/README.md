@@ -53,6 +53,10 @@ Do not expose `8080` or `8888` publicly. The game connects to signaling through
 
 ## Prepare And Start
 
+For the guarded Google Cloud deployment, including quota checks, current cost
+boundaries, private administration, GPU driver setup, stop controls, and complete
+teardown, see [`gcp/README.md`](gcp/README.md).
+
 On the Linux GPU host:
 
 ```bash

@@ -14,6 +14,13 @@ required=(
   "${HOSTING_DIR}/bin/prepare_host.sh"
   "${HOSTING_DIR}/bin/start_stack.sh"
   "${HOSTING_DIR}/bin/start_streamer_linux.sh"
+  "${HOSTING_DIR}/gcp/gcp.env.example"
+  "${HOSTING_DIR}/gcp/startup.sh"
+  "${HOSTING_DIR}/gcp/lib/common.sh"
+  "${HOSTING_DIR}/gcp/bin/preflight.sh"
+  "${HOSTING_DIR}/gcp/bin/create_foundation.sh"
+  "${HOSTING_DIR}/gcp/bin/create_gpu_vm.sh"
+  "${HOSTING_DIR}/gcp/bin/destroy.sh"
 )
 
 for path in "${required[@]}"; do
@@ -22,7 +29,7 @@ done
 
 while IFS= read -r script; do
   bash -n "${script}"
-done < <(find "${HOSTING_DIR}/bin" -type f -name '*.sh' -print)
+done < <(find "${HOSTING_DIR}/bin" "${HOSTING_DIR}/gcp" -type f -name '*.sh' -print)
 
 python3 - "${PROJECT_DIR}/GorillaProtocol.uproject" <<'PY'
 import json

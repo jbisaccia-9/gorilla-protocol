@@ -19,3 +19,5 @@ Collections/
 Hosting/.cache/
 Hosting/.env
 Hosting/runtime/
+Hosting/gcp/gcp.env
+Hosting/gcp/runtime/

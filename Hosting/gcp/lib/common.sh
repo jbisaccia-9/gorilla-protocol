@@ -1,0 +1,92 @@
+#!/usr/bin/env bash
+
+set -euo pipefail
+
+GCP_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")/.." && pwd)"
+REPO_DIR="$(cd "${GCP_DIR}/../.." && pwd)"
+GCP_CONFIG_FILE="${GCP_CONFIG_FILE:-${GCP_DIR}/gcp.env}"
+
+die() {
+  echo "ERROR: $*" >&2
+  exit 1
+}
+
+load_config() {
+  test -s "${GCP_CONFIG_FILE}" || die "Copy Hosting/gcp/gcp.env.example to Hosting/gcp/gcp.env and edit it."
+
+  set -a
+  # shellcheck disable=SC1090
+  . "${GCP_CONFIG_FILE}"
+  set +a
+
+  : "${GCP_PROJECT_ID:?Set GCP_PROJECT_ID in Hosting/gcp/gcp.env}"
+  : "${GCP_REGION:?Set GCP_REGION in Hosting/gcp/gcp.env}"
+  : "${GCP_ZONE:?Set GCP_ZONE in Hosting/gcp/gcp.env}"
+
+  GCP_VM_NAME="${GCP_VM_NAME:-gorilla-protocol-stream}"
+  GCP_MACHINE_TYPE="${GCP_MACHINE_TYPE:-g2-standard-8}"
+  GCP_ACCELERATOR_TYPE="${GCP_ACCELERATOR_TYPE:-nvidia-l4-vws}"
+  GCP_NETWORK="${GCP_NETWORK:-gorilla-protocol}"
+  GCP_SUBNET="${GCP_SUBNET:-gorilla-protocol-us-west1}"
+  GCP_SUBNET_RANGE="${GCP_SUBNET_RANGE:-10.42.0.0/24}"
+  GCP_ADDRESS_NAME="${GCP_ADDRESS_NAME:-gorilla-protocol-ip}"
+  GCP_BOOT_DISK_GB="${GCP_BOOT_DISK_GB:-150}"
+
+  export GCP_VM_NAME GCP_MACHINE_TYPE GCP_ACCELERATOR_TYPE GCP_NETWORK
+  export GCP_SUBNET GCP_SUBNET_RANGE GCP_ADDRESS_NAME GCP_BOOT_DISK_GB
+
+  [[ "${GCP_PROJECT_ID}" =~ ^[a-z][a-z0-9-]{4,28}[a-z0-9]$ ]] || die "GCP_PROJECT_ID is invalid."
+  [[ "${GCP_REGION}" =~ ^[a-z]+-[a-z]+[0-9]+$ ]] || die "GCP_REGION is invalid."
+  [[ "${GCP_ZONE}" =~ ^${GCP_REGION}-[a-z]$ ]] || die "GCP_ZONE must belong to GCP_REGION."
+  [[ "${GCP_VM_NAME}" =~ ^[a-z]([-a-z0-9]*[a-z0-9])?$ ]] || die "GCP_VM_NAME is invalid."
+  [[ "${GCP_MACHINE_TYPE}" =~ ^g2-(standard|custom)-[a-z0-9-]+$ ]] || die "Use a G2 machine type."
+  [[ "${GCP_ACCELERATOR_TYPE}" =~ ^nvidia-l4(-vws)?$ ]] || die "Use nvidia-l4 or nvidia-l4-vws."
+  [[ "${GCP_BOOT_DISK_GB}" =~ ^[0-9]+$ ]] || die "GCP_BOOT_DISK_GB must be an integer."
+  (( GCP_BOOT_DISK_GB >= 40 )) || die "G2 boot disks must be at least 40 GB."
+}
+
+require_tools() {
+  local tool
+  for tool in "$@"; do
+    command -v "${tool}" >/dev/null || die "${tool} is required."
+  done
+}
+
+require_apply() {
+  [[ "${1:-}" == "--apply" ]] || die "This changes GCP resources. Review it, then rerun with --apply."
+}
+
+require_stream_config() {
+  : "${STREAM_DOMAIN:?Set STREAM_DOMAIN in Hosting/gcp/gcp.env}"
+  : "${TLS_EMAIL:?Set TLS_EMAIL in Hosting/gcp/gcp.env}"
+  [[ "${STREAM_DOMAIN}" =~ ^[A-Za-z0-9.-]+$ ]] || die "STREAM_DOMAIN is invalid."
+  [[ "${TLS_EMAIL}" =~ ^[^[:space:]@]+@[^[:space:]@]+\.[^[:space:]@]+$ ]] || die "TLS_EMAIL is invalid."
+  [[ "${GAME_BINARY:-/opt/gorilla-game/GorillaProtocol.sh}" =~ ^/[A-Za-z0-9._/-]+$ ]] || die "GAME_BINARY must be a safe absolute path without spaces."
+  [[ "${TURN_TTL:-3600}" =~ ^[0-9]+$ ]] || die "TURN_TTL must be an integer."
+  [[ "${STREAM_WIDTH:-1920}" =~ ^[0-9]+$ ]] || die "STREAM_WIDTH must be an integer."
+  [[ "${STREAM_HEIGHT:-1080}" =~ ^[0-9]+$ ]] || die "STREAM_HEIGHT must be an integer."
+}
+
+quota_record() {
+  local scope="$1"
+  local metric="$2"
+  local output
+
+  if [[ "${scope}" == "global" ]]; then
+    output="$(gcloud compute project-info describe \
+      --project="${GCP_PROJECT_ID}" \
+      --flatten='quotas[]' \
+      --format='value(quotas.metric,quotas.limit,quotas.usage)')"
+  else
+    output="$(gcloud compute regions describe "${GCP_REGION}" \
+      --project="${GCP_PROJECT_ID}" \
+      --flatten='quotas[]' \
+      --format='value(quotas.metric,quotas.limit,quotas.usage)')"
+  fi
+
+  awk -v wanted="${metric}" '$1 == wanted { print $2, $3; found=1 } END { if (!found) print "0 0" }' <<<"${output}"
+}
+
+resource_exists() {
+  "$@" >/dev/null 2>&1
+}
