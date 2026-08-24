@@ -10,11 +10,11 @@ dialogue is Italian. This project is not affiliated with GoldenEye, Donkey Kong,
 Nintendo, Rare, MGM, EON Productions, Sony, or Microsoft.
 
 [![Play Legacy WebGL](https://img.shields.io/badge/PLAY-Legacy_WebGL-1f7a4d?style=for-the-badge&logo=googlechrome&logoColor=white)](https://jbisaccia-9.github.io/gorilla-golden-eye/)
-[![UE5 Stream](https://img.shields.io/badge/UE5_STREAM-Host_Setup_Required-8b3a2e?style=for-the-badge&logo=unrealengine&logoColor=white)](Hosting/README.md)
+[![UE5 Stream](https://img.shields.io/badge/UE5_STREAM-Linux_Build_Required-8b3a2e?style=for-the-badge&logo=unrealengine&logoColor=white)](Hosting/README.md)
 
 The playable link opens the legacy WebGL prototype. It cannot display changes
-from this Unreal project. The UE5 stream requires the GPU deployment documented
-under `Hosting/`.
+from this Unreal project. The UE5 cloud host is provisioned but intentionally
+stopped until a packaged Linux build is available.
 
 ## Current Status
 
@@ -67,8 +67,8 @@ Every imported asset must be entered in `Licenses/AssetManifest.csv`.
   project assets, caches, and packaged builds
 
 This Mac currently does not have Unreal Engine or full Xcode installed and has
-only about 12 GB free. The project therefore cannot be compiled or launched on
-this machine until storage and toolchain prerequisites are addressed.
+far less than the required free storage. The project therefore cannot be compiled
+or launched on this machine until storage and toolchain prerequisites are addressed.
 
 ## Open And Run
 
@@ -115,9 +115,14 @@ machine, and region checks before allowing any paid resource creation, and it
 includes a `$30` monthly budget alert, automatic idle power-off, a hard per-boot
 runtime limit, explicit stop controls, and full teardown commands.
 
+The Google Cloud network, static address, approved L4 quotas, G2/L4 host, licensed
+NVIDIA workstation driver, cost budget, and shutdown controls are provisioned.
+The host is intentionally stopped, so hourly CPU, GPU, and workstation-license
+charges are not running. Persistent disk and reserved-address charges continue.
+
 There is no public UE5 stream yet because this repository has not been packaged
-and no paid GPU host or DNS endpoint has been supplied. The old GitHub Pages game
-is a separate WebGL codebase.
+as a Linux Shipping build. Uploading that build is the remaining deployment step;
+the old GitHub Pages game is a separate WebGL codebase.
 
 ## Controls
 
