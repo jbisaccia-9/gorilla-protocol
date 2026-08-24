@@ -65,7 +65,7 @@ Set `STREAM_DOMAIN=auto` to use a free IP-based `sslip.io` hostname with a Caddy
 TLS certificate. Replace it with a custom hostname when production DNS is ready.
 
 The recommended Phoenix-area targets are `us-west1` (Oregon) and `us-west4`
-(Las Vegas), subject to quota and live capacity. The default is `us-west1-b`.
+(Las Vegas), subject to quota and live capacity. The default is `us-west1-a`.
 
 ## Create The Paid Host
 
