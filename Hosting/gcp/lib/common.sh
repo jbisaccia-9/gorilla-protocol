@@ -98,6 +98,31 @@ quota_record() {
   awk -v wanted="${metric}" '$1 == wanted { print $2, $3; found=1 } END { if (!found) print "0 0" }' <<<"${output}"
 }
 
+quota_limit() {
+  local quota_id="$1"
+  local region="${2:-}"
+  local quota_json
+
+  quota_json="$(gcloud quotas info describe "${quota_id}" \
+    --service=compute.googleapis.com \
+    --project="${GCP_PROJECT_ID}" \
+    --format=json)"
+
+  python3 -c '
+import json
+import sys
+
+data = json.load(sys.stdin)
+region = sys.argv[1]
+for item in data.get("dimensionsInfos", []):
+    dimensions = item.get("dimensions", {})
+    if not region or dimensions.get("region") == region:
+        print(item.get("details", {}).get("value", "0"))
+        raise SystemExit(0)
+print("0")
+' "${region}" <<<"${quota_json}"
+}
+
 resource_exists() {
   "$@" >/dev/null 2>&1
 }

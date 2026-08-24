@@ -6,7 +6,7 @@ SCRIPT_DIR="$(cd "$(dirname "$0")" && pwd)"
 . "${SCRIPT_DIR}/../lib/common.sh"
 
 load_config
-require_tools gcloud awk
+require_tools gcloud awk python3
 
 active_account="$(gcloud auth list --filter=status:ACTIVE --limit=1 --format='value(account)')"
 test -n "${active_account}" || die "Run gcloud auth login first."
@@ -31,25 +31,27 @@ gcloud compute machine-types describe "${GCP_MACHINE_TYPE}" \
 gcloud compute accelerator-types describe "${GCP_ACCELERATOR_TYPE}" \
   --project="${GCP_PROJECT_ID}" --zone="${GCP_ZONE}" >/dev/null
 
-read -r global_limit global_usage < <(quota_record global GPUS_ALL_REGIONS)
+global_limit="$(quota_limit GPUS-ALL-REGIONS-per-project)"
 regional_metric="NVIDIA_L4_GPUS"
+regional_quota_id="NVIDIA-L4-GPUS-per-project-region"
 if [[ "${GCP_ACCELERATOR_TYPE}" == "nvidia-l4-vws" ]]; then
   regional_metric="NVIDIA_L4_VWS_GPUS"
+  regional_quota_id="NVIDIA-L4-VWS-GPUS-per-project-region"
 fi
-read -r regional_limit regional_usage < <(quota_record regional "${regional_metric}")
+regional_limit="$(quota_limit "${regional_quota_id}" "${GCP_REGION}")"
 
 echo "Project: ${GCP_PROJECT_ID}"
 echo "Target: ${GCP_MACHINE_TYPE} with ${GCP_ACCELERATOR_TYPE} in ${GCP_ZONE}"
-echo "Global GPU quota: ${global_usage}/${global_limit}"
-echo "${regional_metric} quota in ${GCP_REGION}: ${regional_usage}/${regional_limit}"
+echo "Global GPU quota limit: ${global_limit}"
+echo "${regional_metric} quota limit in ${GCP_REGION}: ${regional_limit}"
 
-awk -v limit="${global_limit}" -v usage="${global_usage}" 'BEGIN { exit !((limit - usage) >= 1) }' || {
+awk -v limit="${global_limit}" 'BEGIN { exit !(limit >= 1) }' || {
   echo "Request GPUs (all regions) quota of at least 1:" >&2
   echo "https://console.cloud.google.com/iam-admin/quotas?project=${GCP_PROJECT_ID}" >&2
   exit 2
 }
 
-awk -v limit="${regional_limit}" -v usage="${regional_usage}" 'BEGIN { exit !((limit - usage) >= 1) }' || {
+awk -v limit="${regional_limit}" 'BEGIN { exit !(limit >= 1) }' || {
   echo "Request ${regional_metric} quota of at least 1 in ${GCP_REGION}:" >&2
   echo "https://console.cloud.google.com/iam-admin/quotas?project=${GCP_PROJECT_ID}" >&2
   exit 2
