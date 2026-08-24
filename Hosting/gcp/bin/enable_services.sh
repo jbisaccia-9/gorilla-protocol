@@ -11,6 +11,8 @@ require_tools gcloud
 
 gcloud projects describe "${GCP_PROJECT_ID}" --format='value(projectId)' >/dev/null
 gcloud services enable \
+  billingbudgets.googleapis.com \
+  cloudquotas.googleapis.com \
   compute.googleapis.com \
   iap.googleapis.com \
   oslogin.googleapis.com \

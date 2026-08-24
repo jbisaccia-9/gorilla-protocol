@@ -1,0 +1,6 @@
+[Unit]
+Description=Power off Gorilla Protocol host when no player is connected
+
+[Service]
+Type=oneshot
+ExecStart=/opt/gorilla-protocol/Hosting/bin/idle_guard.sh

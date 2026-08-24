@@ -62,5 +62,6 @@ grep -Eq 'License Status[[:space:]]*:[[:space:]]*Licensed' <<<"${nvidia_details}
   echo "The NVIDIA RTX Virtual Workstation license is not active." >&2
   exit 1
 }
+"/opt/gorilla-protocol/Hosting/bin/install_host_services.sh"
 touch /var/lib/gorilla/bootstrap-ready
 echo "Gorilla Protocol host prerequisites are ready."

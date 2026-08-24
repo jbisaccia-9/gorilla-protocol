@@ -17,6 +17,21 @@ test -x "${GAME_BINARY}" || { echo "Game binary is not executable: ${GAME_BINARY
 STREAMER_URL="${STREAMER_URL:-ws://127.0.0.1:8888}"
 STREAM_WIDTH="${STREAM_WIDTH:-1920}"
 STREAM_HEIGHT="${STREAM_HEIGHT:-1080}"
+STREAMER_WAIT_SECONDS="${STREAMER_WAIT_SECONDS:-120}"
+
+[[ "${STREAMER_WAIT_SECONDS}" =~ ^[0-9]+$ ]] || {
+  echo "STREAMER_WAIT_SECONDS must be an integer." >&2
+  exit 1
+}
+
+deadline=$((SECONDS + STREAMER_WAIT_SECONDS))
+until (exec 3<>/dev/tcp/127.0.0.1/8888) 2>/dev/null; do
+  if (( SECONDS >= deadline )); then
+    echo "Signalling did not become ready on port 8888." >&2
+    exit 1
+  fi
+  sleep 1
+done
 
 exec "${GAME_BINARY}" \
   -PixelStreamingURL="${STREAMER_URL}" \

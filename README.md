@@ -112,7 +112,8 @@ cloud inputs.
 A guarded Google Cloud G2/L4 deployment is included under
 [`Hosting/gcp/`](Hosting/gcp/README.md). It performs read-only billing, quota,
 machine, and region checks before allowing any paid resource creation, and it
-includes explicit stop and full teardown commands.
+includes a `$30` monthly budget alert, automatic idle power-off, a hard per-boot
+runtime limit, explicit stop controls, and full teardown commands.
 
 There is no public UE5 stream yet because this repository has not been packaged
 and no paid GPU host or DNS endpoint has been supplied. The old GitHub Pages game

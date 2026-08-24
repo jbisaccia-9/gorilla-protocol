@@ -1,0 +1,11 @@
+[Unit]
+Description=Check Gorilla Protocol player activity every minute
+
+[Timer]
+OnBootSec=2min
+OnUnitActiveSec=1min
+AccuracySec=10s
+Persistent=false
+
+[Install]
+WantedBy=timers.target

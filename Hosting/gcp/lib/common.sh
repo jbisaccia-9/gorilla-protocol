@@ -31,9 +31,15 @@ load_config() {
   GCP_SUBNET_RANGE="${GCP_SUBNET_RANGE:-10.42.0.0/24}"
   GCP_ADDRESS_NAME="${GCP_ADDRESS_NAME:-gorilla-protocol-ip}"
   GCP_BOOT_DISK_GB="${GCP_BOOT_DISK_GB:-150}"
+  GCP_MONTHLY_BUDGET_USD="${GCP_MONTHLY_BUDGET_USD:-30}"
+  IDLE_SHUTDOWN_SECONDS="${IDLE_SHUTDOWN_SECONDS:-600}"
+  BOOT_GRACE_SECONDS="${BOOT_GRACE_SECONDS:-900}"
+  MAX_RUNTIME_SECONDS="${MAX_RUNTIME_SECONDS:-7200}"
 
   export GCP_VM_NAME GCP_MACHINE_TYPE GCP_ACCELERATOR_TYPE GCP_NETWORK
   export GCP_SUBNET GCP_SUBNET_RANGE GCP_ADDRESS_NAME GCP_BOOT_DISK_GB
+  export GCP_MONTHLY_BUDGET_USD IDLE_SHUTDOWN_SECONDS BOOT_GRACE_SECONDS
+  export MAX_RUNTIME_SECONDS
 
   [[ "${GCP_PROJECT_ID}" =~ ^[a-z][a-z0-9-]{4,28}[a-z0-9]$ ]] || die "GCP_PROJECT_ID is invalid."
   [[ "${GCP_REGION}" =~ ^[a-z]+-[a-z]+[0-9]+$ ]] || die "GCP_REGION is invalid."
@@ -43,6 +49,13 @@ load_config() {
   [[ "${GCP_ACCELERATOR_TYPE}" =~ ^nvidia-l4(-vws)?$ ]] || die "Use nvidia-l4 or nvidia-l4-vws."
   [[ "${GCP_BOOT_DISK_GB}" =~ ^[0-9]+$ ]] || die "GCP_BOOT_DISK_GB must be an integer."
   (( GCP_BOOT_DISK_GB >= 40 )) || die "G2 boot disks must be at least 40 GB."
+  [[ "${GCP_MONTHLY_BUDGET_USD}" =~ ^[0-9]+([.][0-9]+)?$ ]] || die "GCP_MONTHLY_BUDGET_USD must be a positive number."
+  [[ "${IDLE_SHUTDOWN_SECONDS}" =~ ^[0-9]+$ ]] || die "IDLE_SHUTDOWN_SECONDS must be an integer."
+  [[ "${BOOT_GRACE_SECONDS}" =~ ^[0-9]+$ ]] || die "BOOT_GRACE_SECONDS must be an integer."
+  [[ "${MAX_RUNTIME_SECONDS}" =~ ^[0-9]+$ ]] || die "MAX_RUNTIME_SECONDS must be an integer."
+  (( IDLE_SHUTDOWN_SECONDS >= 300 )) || die "IDLE_SHUTDOWN_SECONDS must be at least 300."
+  (( BOOT_GRACE_SECONDS >= IDLE_SHUTDOWN_SECONDS )) || die "BOOT_GRACE_SECONDS must be at least IDLE_SHUTDOWN_SECONDS."
+  (( MAX_RUNTIME_SECONDS >= BOOT_GRACE_SECONDS )) || die "MAX_RUNTIME_SECONDS must be at least BOOT_GRACE_SECONDS."
 }
 
 require_tools() {
@@ -58,9 +71,7 @@ require_apply() {
 
 require_stream_config() {
   : "${STREAM_DOMAIN:?Set STREAM_DOMAIN in Hosting/gcp/gcp.env}"
-  : "${TLS_EMAIL:?Set TLS_EMAIL in Hosting/gcp/gcp.env}"
-  [[ "${STREAM_DOMAIN}" =~ ^[A-Za-z0-9.-]+$ ]] || die "STREAM_DOMAIN is invalid."
-  [[ "${TLS_EMAIL}" =~ ^[^[:space:]@]+@[^[:space:]@]+\.[^[:space:]@]+$ ]] || die "TLS_EMAIL is invalid."
+  [[ "${STREAM_DOMAIN}" == "auto" || "${STREAM_DOMAIN}" =~ ^[A-Za-z0-9.-]+$ ]] || die "STREAM_DOMAIN is invalid."
   [[ "${GAME_BINARY:-/opt/gorilla-game/GorillaProtocol.sh}" =~ ^/[A-Za-z0-9._/-]+$ ]] || die "GAME_BINARY must be a safe absolute path without spaces."
   [[ "${TURN_TTL:-3600}" =~ ^[0-9]+$ ]] || die "TURN_TTL must be an integer."
   [[ "${STREAM_WIDTH:-1920}" =~ ^[0-9]+$ ]] || die "STREAM_WIDTH must be an integer."
