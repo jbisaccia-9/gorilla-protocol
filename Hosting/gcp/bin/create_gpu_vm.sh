@@ -41,6 +41,7 @@ gcloud compute instances create "${GCP_VM_NAME}" \
   --metadata=enable-oslogin=TRUE \
   --metadata-from-file="startup-script=${SCRIPT_DIR}/../startup.sh" \
   --no-service-account \
+  --no-scopes \
   --no-shielded-secure-boot \
   --shielded-vtpm \
   --shielded-integrity-monitoring

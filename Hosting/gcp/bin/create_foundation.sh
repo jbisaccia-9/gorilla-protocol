@@ -56,5 +56,9 @@ fi
 
 public_ip="$(gcloud compute addresses describe "${GCP_ADDRESS_NAME}" \
   --project="${GCP_PROJECT_ID}" --region="${GCP_REGION}" --format='value(address)')"
-echo "Foundation ready. Create an A record for ${STREAM_DOMAIN:-play.example.com} pointing to ${public_ip}."
+if [[ "${STREAM_DOMAIN:-auto}" == "auto" ]]; then
+  echo "Foundation ready. Automatic stream hostname: ${public_ip//./-}.sslip.io"
+else
+  echo "Foundation ready. Create an A record for ${STREAM_DOMAIN} pointing to ${public_ip}."
+fi
 echo "The reserved address can incur charges while unused."
