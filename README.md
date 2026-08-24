@@ -9,6 +9,11 @@ The protagonist is Agent Bruno, an original gorilla operative whose spoken
 dialogue is Italian. This project is not affiliated with GoldenEye, Donkey Kong,
 Nintendo, Rare, MGM, EON Productions, Sony, or Microsoft.
 
+[![Play Now](https://img.shields.io/badge/PLAY_NOW-Browser_Companion-1f7a4d?style=for-the-badge&logo=googlechrome&logoColor=white)](https://jbisaccia-9.github.io/gorilla-golden-eye/)
+
+The Play Now link opens the hosted browser companion. It is the legacy WebGL
+prototype, not a streamed build of this Unreal Engine project.
+
 ## Current Status
 
 The repository contains a code-complete graybox framework, not finished AAA art.
