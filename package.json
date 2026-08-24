@@ -1,0 +1,13 @@
+{
+  "name": "gorilla-golden-eye",
+  "version": "2.0.0",
+  "private": true,
+  "scripts": {
+    "build": "node build-game.js",
+    "build:standalone": "node build-game.js && node build-standalone.js",
+    "check": "node --check game-3d.source.js && node --check audio.js && node --check build-game.js && node --check build-standalone.js"
+  },
+  "devDependencies": {
+    "esbuild": "0.28.2"
+  }
+}

@@ -1,17 +1,20 @@
 # Gorilla Golden Eye: Operazione Banana
 
-A dependency-free browser first-person shooter starring Gori Kongo, an original
-Italian-speaking gorilla secret agent. The game combines a retro raycast look
-with modern desktop and touch controls.
+A browser-native 3D first-person shooter starring Gori Kongo, an original
+Italian-speaking gorilla secret agent. The game carries a classic console-spy
+framework into a modern WebGL presentation with desktop and touch controls.
 
 ## Features
 
-- Three missions with distinct maps and objectives
-- Guards that pursue, fire visible projectiles, and attack at close range
+- True Three.js WebGL environments with procedural materials, lighting, fog, and shadows
+- Three missions with distinct maps, palettes, and objectives
+- Guards with patrol, suspicion, investigation, burst-fire, stagger, and melee states
+- Procedural 3D guards, pickups, world effects, and gorilla weapon viewmodel
+- Visible world-space projectiles, headshots, near misses, and directional damage feedback
 - Wall collision, health, ammunition, pickups, scoring, and level progression
-- Mouse-look, keyboard controls, and a mobile touch interface
+- Mouse-look, aim-down-sights, sprint, keyboard controls, and a mobile touch interface
 - Procedural Web Audio and optional Italian browser speech synthesis
-- A self-contained HTML release with all code and art embedded
+- Adaptive rendering quality and a self-contained HTML release
 
 ## Play
 
@@ -30,6 +33,8 @@ Then visit `http://localhost:8081`.
 - `WASD`: move and strafe
 - Mouse: look
 - Left click or `Space`: fire
+- Right click: aim down sights
+- `Shift`: sprint
 - `R`: reload
 - `P` or `Escape`: pause
 - `M`: mute
@@ -37,15 +42,20 @@ Then visit `http://localhost:8081`.
 
 ## Mission
 
-Each of the three levels requires Gori Kongo to recover the glowing cyan intelligence pickup and eliminate every guard. Ammo and health pickups are scattered through the map. Health partially recovers between missions.
+Each of the three levels requires Gori Kongo to recover the glowing cyan intelligence pickup, eliminate every guard, and return to the illuminated extraction point. Ammo and health pickups are scattered through the map. Health partially recovers between missions.
 
 ## Build
 
-The source edition is split into `index.html`, `styles.css`, `audio.js`, `game.js`, and two generated PNG sprites. Rebuild the self-contained edition after any source change:
+Install the build-time dependency, compile the local Three.js source into an
+import-free browser bundle, and rebuild the standalone edition:
 
 ```bash
-node build-standalone.js
+npm install
+npm run build:standalone
 ```
+
+The committed `game.js` and standalone HTML are ready to run without installing
+packages. The build dependency is required only when editing `game-3d.source.js`.
 
 ## Privacy
 
@@ -59,8 +69,10 @@ Released under the [MIT License](LICENSE). Copyright (c) 2026 Joseph Bisaccia.
 ## Project Layout
 
 - `index.html`, `styles.css`: page structure and interface
-- `game.js`: rendering, controls, missions, enemy AI, and combat
+- `game-3d.source.js`: maintainable WebGL game source
+- `game.js`: generated import-free browser bundle
 - `audio.js`: procedural effects and optional Italian speech
-- `assets/`: bundled generated character art
+- `vendor/`: locally vendored Three.js revision 183 modules
+- `build-game.js`: esbuild bundler for the browser runtime
 - `build-standalone.js`: repeatable single-file release builder
 - `gorilla-golden-eye-standalone.html`: downloadable self-contained edition
