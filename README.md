@@ -94,6 +94,8 @@ export UE_ROOT="/path/to/UE_5.8"
 
 Shipping builds for Pixel Streaming use `Scripts/package_linux.sh` or
 `Scripts/package_windows.ps1` on the corresponding UE5.8 build machine.
+For a copy-paste Linux workflow that creates the exact cloud-upload archive, see
+[`LINUX_BUILD_README.md`](LINUX_BUILD_README.md).
 
 Source-only validation does not require Unreal:
 

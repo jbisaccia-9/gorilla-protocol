@@ -8,7 +8,9 @@ python3 -m json.tool GorillaProtocol.uproject >/dev/null
 
 required=(
   GorillaProtocol.uproject
+  LINUX_BUILD_README.md
   Config/DefaultEngine.ini
+  Scripts/build_linux_shipping.sh
   Source/GorillaProtocol.Target.cs
   Source/GorillaProtocolEditor.Target.cs
   Source/GorillaProtocol/GorillaProtocol.Build.cs
