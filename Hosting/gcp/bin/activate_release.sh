@@ -14,9 +14,10 @@ fi
 
 git -C /opt/gorilla-protocol fetch --depth 1 origin main
 git -C /opt/gorilla-protocol checkout --detach FETCH_HEAD
-install -m 600 "${env_file}" /opt/gorilla-protocol/Hosting/.env
-/opt/gorilla-protocol/Hosting/bin/start_stack.sh
 /opt/gorilla-protocol/Hosting/bin/install_host_services.sh
+install -o root -g gorilla-stream -m 640 \
+  "${env_file}" /opt/gorilla-protocol/Hosting/.env
+/opt/gorilla-protocol/Hosting/bin/start_stack.sh
 systemctl restart gorilla-streamer.service
 
 echo "Release activated."

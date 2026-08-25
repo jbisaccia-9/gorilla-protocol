@@ -4,13 +4,13 @@ Requires=docker.service
 After=docker.service network-online.target
 Wants=network-online.target
 ConditionPathExists=/opt/gorilla-protocol/Hosting/.env
-ConditionPathIsExecutable=/opt/gorilla-game/GorillaProtocol.sh
 
 [Service]
 Type=simple
 User=gorilla-stream
 Group=gorilla-stream
 WorkingDirectory=/opt/gorilla-game
+ExecCondition=/usr/bin/test -x /opt/gorilla-game/GorillaProtocol.sh
 ExecStart=/opt/gorilla-protocol/Hosting/bin/start_streamer_linux.sh
 Restart=on-failure
 RestartSec=5
