@@ -9,12 +9,12 @@ The protagonist is Agent Bruno, an original gorilla operative whose spoken
 dialogue is Italian. This project is not affiliated with GoldenEye, Donkey Kong,
 Nintendo, Rare, MGM, EON Productions, Sony, or Microsoft.
 
+[![Play UE5 Cloud Stream](https://img.shields.io/badge/PLAY-UE5_Cloud_Stream-8b3a2e?style=for-the-badge&logo=unrealengine&logoColor=white)](https://35-252-252-152.sslip.io/)
 [![Play Legacy WebGL](https://img.shields.io/badge/PLAY-Legacy_WebGL-1f7a4d?style=for-the-badge&logo=googlechrome&logoColor=white)](https://jbisaccia-9.github.io/gorilla-golden-eye/)
-[![UE5 Stream](https://img.shields.io/badge/UE5_STREAM-Linux_Build_Required-8b3a2e?style=for-the-badge&logo=unrealengine&logoColor=white)](Hosting/README.md)
 
-The playable link opens the legacy WebGL prototype. It cannot display changes
-from this Unreal project. The UE5 cloud host is provisioned but intentionally
-stopped until a packaged Linux build is available.
+The UE5 link opens the deployed Linux Shipping build through Pixel Streaming 2.
+The legacy link opens the older WebGL prototype and does not contain changes from
+this Unreal project.
 
 ## Current Status
 
@@ -118,13 +118,13 @@ includes a `$30` monthly budget alert, automatic idle power-off, a hard per-boot
 runtime limit, explicit stop controls, and full teardown commands.
 
 The Google Cloud network, static address, approved L4 quotas, G2/L4 host, licensed
-NVIDIA workstation driver, cost budget, and shutdown controls are provisioned.
-The host is intentionally stopped, so hourly CPU, GPU, and workstation-license
-charges are not running. Persistent disk and reserved-address charges continue.
+NVIDIA workstation driver, cost budget, shutdown controls, Linux Shipping build,
+and public HTTPS stream are deployed. The host automatically powers off after ten
+minutes without an established player connection and has a hard two-hour runtime
+limit per boot. A stopped host must be started by the operator before the Play link
+will respond. Persistent disk and reserved-address charges continue while stopped.
 
-There is no public UE5 stream yet because this repository has not been packaged
-as a Linux Shipping build. Uploading that build is the remaining deployment step;
-the old GitHub Pages game is a separate WebGL codebase.
+The old GitHub Pages game is a separate WebGL codebase.
 
 ## Controls
 

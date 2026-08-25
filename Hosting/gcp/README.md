@@ -13,10 +13,12 @@ IAP-only SSH rule, browser-streaming firewall rules, static address, approved L4
 quotas, and one `g2-standard-8` L4 host. The NVIDIA RTX Virtual Workstation driver
 is installed and permanently licensed, and the idle-shutdown timer is active.
 
-The host is intentionally stopped pending a packaged Linux Shipping build. This
-stops hourly VM, GPU, and workstation-license charges; the 150 GB persistent disk
-and reserved address remain billable. No playable UE5 endpoint should be published
-until the package is uploaded and verified.
+The Linux Shipping build is deployed and verified through the public HTTPS Pixel
+Streaming page. The host powers off after ten minutes without an established player
+and has a hard two-hour runtime limit per boot. Stopping it ends hourly VM, GPU, and
+workstation-license charges; the 150 GB persistent disk and reserved address remain
+billable. A stopped host must be started by the operator before the public page will
+respond.
 
 No project ID, account, token, TLS key, TURN secret, or packaged game is committed.
 Every action that can create resources, begin charges, deploy code, or delete
