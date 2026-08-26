@@ -21,3 +21,4 @@ Hosting/.env
 Hosting/runtime/
 Hosting/gcp/gcp.env
 Hosting/gcp/runtime/
+archive/java-swing/out/

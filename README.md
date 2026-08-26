@@ -10,11 +10,11 @@ dialogue is Italian. This project is not affiliated with GoldenEye, Donkey Kong,
 Nintendo, Rare, MGM, EON Productions, Sony, or Microsoft.
 
 [![Play UE5 Cloud Stream](https://img.shields.io/badge/PLAY-UE5_Cloud_Stream-8b3a2e?style=for-the-badge&logo=unrealengine&logoColor=white)](https://35-252-252-152.sslip.io/)
-[![Play Legacy WebGL](https://img.shields.io/badge/PLAY-Legacy_WebGL-1f7a4d?style=for-the-badge&logo=googlechrome&logoColor=white)](https://jbisaccia-9.github.io/gorilla-golden-eye/)
 
 The UE5 link opens the deployed Linux Shipping build through Pixel Streaming 2.
-The legacy link opens the older WebGL prototype and does not contain changes from
-this Unreal project.
+The host powers off when idle, so the operator may need to start it before the
+link responds. Earlier Java and WebGL versions are preserved in this repository
+under [`archive/`](archive/).
 
 ## Current Status
 
@@ -124,7 +124,8 @@ minutes without an established player connection and has a hard two-hour runtime
 limit per boot. A stopped host must be started by the operator before the Play link
 will respond. Persistent disk and reserved-address charges continue while stopped.
 
-The old GitHub Pages game is a separate WebGL codebase.
+The previous GitHub Pages version is preserved in
+[`archive/webgl-classic/`](archive/webgl-classic/) with its original Git history.
 
 ## Controls
 
@@ -153,6 +154,17 @@ extraction marker. Eliminating every guard is optional.
 
 Gameplay state remains in C++. Blueprints should assemble presentation, animation,
 audio, effects, and asset references without duplicating combat or mission rules.
+
+## Historical Iterations
+
+- [`archive/java-swing/`](archive/java-swing/) preserves the original desktop
+  Java/Swing prototype with basic-IDE and command-line run instructions.
+- [`archive/webgl-classic/`](archive/webgl-classic/) preserves the complete
+  browser-native WebGL release, including its standalone HTML build and imported
+  commit history.
+
+These snapshots are retained for reference. The repository root is the only
+active game source and the UE5 cloud stream above is the only current release.
 
 ## Console Boundary
 
