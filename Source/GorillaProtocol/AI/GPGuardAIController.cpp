@@ -5,8 +5,9 @@
 #include "Characters/GPGuardCharacter.h"
 #include "Components/GPHealthComponent.h"
 #include "Components/GPWeaponComponent.h"
-#include "Kismet/GameplayStatics.h"
+#include "GameFramework/CharacterMovementComponent.h"
 #include "NavigationSystem.h"
+#include "Navigation/PathFollowingComponent.h"
 #include "Perception/AIPerceptionComponent.h"
 #include "Perception/AISenseConfig_Hearing.h"
 #include "Perception/AISenseConfig_Sight.h"
@@ -47,12 +48,30 @@ void AGPGuardAIController::OnPossess(APawn* InPawn)
     Super::OnPossess(InPawn);
     GuardPawn = Cast<AGPGuardCharacter>(InPawn);
     PatrolOrigin = InPawn ? InPawn->GetActorLocation() : FVector::ZeroVector;
+    CombatRandom.Initialize(InPawn ? static_cast<int32>(GetTypeHash(InPawn->GetFName())) : 1337);
+    if (GuardPawn && GetWorld())
+    {
+        if (UGPEncounterSubsystem* Encounter = GetWorld()->GetSubsystem<UGPEncounterSubsystem>())
+        {
+            TacticalRole = Encounter->RegisterCombatant(GuardPawn);
+            LastObservedSuppressionSerial = Encounter->GetSuppressionSerial();
+        }
+        GuardPawn->GetWeaponComponent()->SetSpreadSeed(CombatRandom.GetInitialSeed());
+    }
     EnterState(EGPGuardState::Patrol);
 }
 
 void AGPGuardAIController::OnUnPossess()
 {
     ReleaseFireToken();
+    ReleaseMeleeToken();
+    if (GuardPawn && GetWorld())
+    {
+        if (UGPEncounterSubsystem* Encounter = GetWorld()->GetSubsystem<UGPEncounterSubsystem>())
+        {
+            Encounter->UnregisterCombatant(GuardPawn);
+        }
+    }
     GuardPawn = nullptr;
     TargetActor = nullptr;
     bHasSightStimulus = false;
@@ -68,6 +87,7 @@ void AGPGuardAIController::Tick(float DeltaSeconds)
     }
 
     const float Now = GetWorld()->GetTimeSeconds();
+    TryAcquireSharedContact();
     switch (GuardState)
     {
         case EGPGuardState::Patrol:
@@ -82,27 +102,68 @@ void AGPGuardAIController::Tick(float DeltaSeconds)
         case EGPGuardState::Engage:
             TickCombat(Now);
             break;
+        case EGPGuardState::Reposition:
+            TickReposition(Now);
+            break;
         case EGPGuardState::Telegraph:
-            if (!CanSeeTarget()) EnterState(EGPGuardState::Investigate);
+            if (!CanSeeTarget())
+            {
+                EnterState(EGPGuardState::Investigate);
+            }
             else if (Now >= StateDeadline)
             {
-                BurstRoundsRemaining = 3;
+                const float Distance = FVector::Dist(GuardPawn->GetActorLocation(), TargetActor->GetActorLocation());
+                BurstRoundsRemaining = GetBurstSizeForDistance(Distance);
                 EnterState(EGPGuardState::FireBurst);
                 NextDecisionTime = Now;
             }
             break;
         case EGPGuardState::FireBurst:
+            if (!CanSeeTarget())
+            {
+                EnterState(EGPGuardState::Investigate);
+                break;
+            }
             if (Now >= NextDecisionTime && BurstRoundsRemaining > 0)
             {
-                GuardPawn->GetWeaponComponent()->FireSingleShot();
-                --BurstRoundsRemaining;
-                NextDecisionTime = Now + 0.11f;
+                UGPWeaponComponent* Weapon = GuardPawn->GetWeaponComponent();
+                if (Weapon->FireSingleShot())
+                {
+                    --BurstRoundsRemaining;
+                }
+                else if (Weapon->IsReloading() || Weapon->GetMagazineAmmo() <= 0)
+                {
+                    EnterState(EGPGuardState::Reload, Weapon->GetReloadDuration());
+                    break;
+                }
+                NextDecisionTime = Now + Weapon->GetFireInterval();
             }
             if (BurstRoundsRemaining <= 0)
             {
+                if (UGPEncounterSubsystem* Encounter = GetWorld()->GetSubsystem<UGPEncounterSubsystem>())
+                {
+                    Encounter->ReportSuppression(GuardPawn, LastKnownLocation);
+                    LastObservedSuppressionSerial = Encounter->GetSuppressionSerial();
+                }
                 ReleaseFireToken();
-                NextAttackTime = Now + FMath::FRandRange(1.0f, 1.6f);
-                EnterState(EGPGuardState::Engage);
+                ++CompletedBursts;
+                NextAttackTime = Now + CombatRandom.FRandRange(0.85f, 1.25f);
+                if (CompletedBursts % 2 == 0)
+                {
+                    BeginReposition(Now, false);
+                }
+                else
+                {
+                    EnterState(EGPGuardState::Engage);
+                }
+            }
+            break;
+        case EGPGuardState::Reload:
+            TickReposition(Now);
+            if (!GuardPawn->GetWeaponComponent()->IsReloading())
+            {
+                NextAttackTime = Now + 0.35f;
+                EnterState(HasValidTarget() ? EGPGuardState::Engage : EGPGuardState::Investigate);
             }
             break;
         case EGPGuardState::Stagger:
@@ -118,7 +179,8 @@ void AGPGuardAIController::Tick(float DeltaSeconds)
                         Health->ReceiveDamage(25.0f, GuardPawn);
                     }
                 }
-                NextAttackTime = Now + 1.0f;
+                ReleaseMeleeToken();
+                NextAttackTime = Now + 1.15f;
                 EnterState(EGPGuardState::Engage);
             }
             break;
@@ -142,6 +204,7 @@ void AGPGuardAIController::HandleTargetPerception(AActor* Actor, FAIStimulus Sti
         {
             bHasSightStimulus = true;
             SetTarget(Actor);
+            ReportContactToSquad();
             EnterState(EGPGuardState::Suspicious, 0.65f);
         }
         else if (GuardState == EGPGuardState::Patrol)
@@ -166,6 +229,7 @@ void AGPGuardAIController::NotifyDamaged(AActor* DamageCauser)
     {
         SetTarget(DamageCauser);
         bHasSightStimulus = LineOfSightTo(DamageCauser);
+        ReportContactToSquad();
     }
     ReleaseFireToken();
     EnterState(EGPGuardState::Stagger, 0.22f);
@@ -174,10 +238,18 @@ void AGPGuardAIController::NotifyDamaged(AActor* DamageCauser)
 void AGPGuardAIController::NotifyGuardDeath()
 {
     ReleaseFireToken();
+    ReleaseMeleeToken();
     StopMovement();
     ClearFocus(EAIFocusPriority::Gameplay);
     bHasSightStimulus = false;
     EnterState(EGPGuardState::Dead);
+    if (GuardPawn && GetWorld())
+    {
+        if (UGPEncounterSubsystem* Encounter = GetWorld()->GetSubsystem<UGPEncounterSubsystem>())
+        {
+            Encounter->UnregisterCombatant(GuardPawn);
+        }
+    }
 }
 
 void AGPGuardAIController::SetTarget(AActor* NewTarget)
@@ -192,11 +264,65 @@ void AGPGuardAIController::SetTarget(AActor* NewTarget)
 
 void AGPGuardAIController::EnterState(EGPGuardState NewState, float Duration)
 {
-    GuardState = NewState;
-    StateDeadline = GetWorld() ? GetWorld()->GetTimeSeconds() + Duration : Duration;
-    if (NewState == EGPGuardState::Investigate || NewState == EGPGuardState::Patrol)
+    if (NewState != EGPGuardState::Telegraph && NewState != EGPGuardState::FireBurst)
     {
         ReleaseFireToken();
+    }
+    if (NewState != EGPGuardState::MeleeWindup)
+    {
+        ReleaseMeleeToken();
+    }
+    GuardState = NewState;
+    StateDeadline = GetWorld() ? GetWorld()->GetTimeSeconds() + Duration : Duration;
+    if (!GuardPawn)
+    {
+        return;
+    }
+
+    UGPWeaponComponent* Weapon = GuardPawn->GetWeaponComponent();
+    Weapon->SetAiming(NewState != EGPGuardState::Patrol && NewState != EGPGuardState::Suspicious &&
+        NewState != EGPGuardState::Dead);
+    if (NewState == EGPGuardState::Engage || NewState == EGPGuardState::Telegraph ||
+        NewState == EGPGuardState::FireBurst)
+    {
+        GuardPawn->GetCharacterMovement()->MaxWalkSpeed = 360.0f;
+    }
+    switch (NewState)
+    {
+        case EGPGuardState::Patrol:
+            GuardPawn->SetCombatCue(EGPGuardCombatCue::None);
+            break;
+        case EGPGuardState::Suspicious:
+            GuardPawn->SetCombatCue(EGPGuardCombatCue::Alert);
+            break;
+        case EGPGuardState::Reposition:
+            GuardPawn->SetCombatCue(EGPGuardCombatCue::Flanking);
+            break;
+        case EGPGuardState::Telegraph:
+            GuardPawn->SetCombatCue(EGPGuardCombatCue::Telegraph);
+            break;
+        case EGPGuardState::FireBurst:
+            GuardPawn->SetCombatCue(EGPGuardCombatCue::Firing);
+            break;
+        case EGPGuardState::Reload:
+            GuardPawn->SetCombatCue(EGPGuardCombatCue::Reloading);
+            break;
+        case EGPGuardState::MeleeWindup:
+            GuardPawn->SetCombatCue(EGPGuardCombatCue::Melee);
+            break;
+        case EGPGuardState::Stagger:
+            GuardPawn->SetCombatCue(EGPGuardCombatCue::Hit);
+            break;
+        case EGPGuardState::Dead:
+            GuardPawn->SetCombatCue(EGPGuardCombatCue::None);
+            break;
+        default:
+            GuardPawn->SetCombatCue(EGPGuardCombatCue::Alert);
+            break;
+    }
+
+    if (NewState == EGPGuardState::Investigate || NewState == EGPGuardState::Patrol)
+    {
         ClearFocus(EAIFocusPriority::Gameplay);
     }
 }
@@ -204,7 +330,7 @@ void AGPGuardAIController::EnterState(EGPGuardState NewState, float Duration)
 void AGPGuardAIController::TickPatrol(float Now)
 {
     if (Now < NextDecisionTime || !GuardPawn) return;
-    NextDecisionTime = Now + FMath::FRandRange(3.0f, 5.0f);
+    NextDecisionTime = Now + CombatRandom.FRandRange(3.0f, 5.0f);
     if (UNavigationSystemV1* Navigation = FNavigationSystem::GetCurrent<UNavigationSystemV1>(GetWorld()))
     {
         FNavLocation Destination;
@@ -249,26 +375,57 @@ void AGPGuardAIController::TickCombat(float Now)
     LastKnownLocation = TargetActor->GetActorLocation();
     LastContactTime = Now;
     SetFocus(TargetActor, EAIFocusPriority::Gameplay);
+    ReportContactToSquad();
+
+    if (UGPEncounterSubsystem* Encounter = GetWorld()->GetSubsystem<UGPEncounterSubsystem>())
+    {
+        const uint32 SuppressionSerial = Encounter->GetSuppressionSerial();
+        if (SuppressionSerial != LastObservedSuppressionSerial)
+        {
+            LastObservedSuppressionSerial = SuppressionSerial;
+            if (!bOwnsFireToken && TacticalRole != EGPGuardTacticalRole::Pressure)
+            {
+                BeginReposition(Now, true);
+                return;
+            }
+        }
+    }
 
     if (Distance < 130.0f && Now >= NextAttackTime)
     {
-        StopMovement();
-        EnterState(EGPGuardState::MeleeWindup, 0.55f);
+        if (UGPEncounterSubsystem* Encounter = GetWorld()->GetSubsystem<UGPEncounterSubsystem>())
+        {
+            bOwnsMeleeToken = Encounter->RequestMeleeToken(GuardPawn);
+        }
+        if (bOwnsMeleeToken)
+        {
+            StopMovement();
+            EnterState(EGPGuardState::MeleeWindup, 0.55f);
+        }
+        else
+        {
+            BeginReposition(Now, true);
+        }
         return;
     }
-    if (Distance > 1800.0f)
+
+    UGPWeaponComponent* Weapon = GuardPawn->GetWeaponComponent();
+    if (Weapon->GetMagazineAmmo() <= 0)
     {
-        MoveToActor(TargetActor, 1200.0f, true);
+        Weapon->Reload();
+        BeginReposition(Now, false);
+        EnterState(EGPGuardState::Reload, Weapon->GetReloadDuration());
+        return;
     }
-    else if (Distance < 700.0f)
+
+    const float DesiredRange = GetDesiredRangeForRole(TacticalRole);
+    if (Now >= NextRepositionTime || Distance > DesiredRange + 650.0f || Distance < DesiredRange - 450.0f)
     {
-        const FVector RetreatDirection = (GuardPawn->GetActorLocation() - TargetActor->GetActorLocation()).GetSafeNormal();
-        MoveToLocation(GuardPawn->GetActorLocation() + RetreatDirection * 450.0f, 70.0f, true);
+        BeginReposition(Now, false);
+        return;
     }
-    else
-    {
-        StopMovement();
-    }
+
+    StopMovement();
 
     if (Now >= NextAttackTime)
     {
@@ -278,20 +435,121 @@ void AGPGuardAIController::TickCombat(float Now)
             if (bOwnsFireToken)
             {
                 StopMovement();
-                EnterState(EGPGuardState::Telegraph, 0.45f);
+                const float TelegraphDuration = TacticalRole == EGPGuardTacticalRole::Support ? 0.62f : 0.48f;
+                EnterState(EGPGuardState::Telegraph, TelegraphDuration);
             }
         }
     }
 }
 
+void AGPGuardAIController::TickReposition(float Now)
+{
+    if (!HasValidTarget())
+    {
+        EnterState(EGPGuardState::Investigate);
+        return;
+    }
+
+    if (CanSeeTarget())
+    {
+        LastKnownLocation = TargetActor->GetActorLocation();
+        LastContactTime = Now;
+        SetFocus(TargetActor, EAIFocusPriority::Gameplay);
+    }
+    if (GuardState == EGPGuardState::Reposition &&
+        (Now >= StateDeadline || GetMoveStatus() == EPathFollowingStatus::Idle))
+    {
+        EnterState(CanSeeTarget() ? EGPGuardState::Engage : EGPGuardState::Investigate);
+    }
+}
+
+void AGPGuardAIController::BeginReposition(float Now, bool bForcedBySuppression)
+{
+    if (!GuardPawn || !HasValidTarget())
+    {
+        return;
+    }
+
+    const FVector TargetLocation = TargetActor->GetActorLocation();
+    FVector AwayFromTarget = GuardPawn->GetActorLocation() - TargetLocation;
+    if (AwayFromTarget.IsNearlyZero())
+    {
+        AwayFromTarget = -TargetActor->GetActorForwardVector();
+    }
+    const float DesiredRange = GetDesiredRangeForRole(TacticalRole);
+    const float FlankWidth = bForcedBySuppression ? 760.0f : 590.0f;
+    FVector Destination = TargetLocation + UGPEncounterSubsystem::CalculateFormationOffset(
+        TacticalRole, AwayFromTarget, DesiredRange, FlankWidth);
+
+    const FVector Right = FVector::CrossProduct(FVector::UpVector, AwayFromTarget.GetSafeNormal2D());
+    Destination += Right * CombatRandom.FRandRange(-90.0f, 90.0f);
+    if (UNavigationSystemV1* Navigation = FNavigationSystem::GetCurrent<UNavigationSystemV1>(GetWorld()))
+    {
+        FNavLocation ProjectedDestination;
+        if (Navigation->ProjectPointToNavigation(Destination, ProjectedDestination, FVector(240.0f, 240.0f, 400.0f)))
+        {
+            Destination = ProjectedDestination.Location;
+        }
+    }
+
+    GuardPawn->GetCharacterMovement()->MaxWalkSpeed = bForcedBySuppression ? 470.0f : 420.0f;
+    MoveToLocation(Destination, 90.0f, true);
+    NextRepositionTime = Now + CombatRandom.FRandRange(3.2f, 4.4f);
+    EnterState(EGPGuardState::Reposition, bForcedBySuppression ? 1.75f : 1.45f);
+}
+
+void AGPGuardAIController::TryAcquireSharedContact()
+{
+    if (HasValidTarget() || GuardState == EGPGuardState::Dead || !GetWorld())
+    {
+        return;
+    }
+
+    if (UGPEncounterSubsystem* Encounter = GetWorld()->GetSubsystem<UGPEncounterSubsystem>())
+    {
+        AActor* SharedTarget = nullptr;
+        FVector SharedLocation;
+        if (Encounter->GetSharedContact(SharedTarget, SharedLocation))
+        {
+            TargetActor = SharedTarget;
+            LastKnownLocation = SharedLocation;
+            LastContactTime = GetWorld()->GetTimeSeconds();
+            bHasSightStimulus = false;
+            EnterState(EGPGuardState::Investigate);
+        }
+    }
+}
+
+void AGPGuardAIController::ReportContactToSquad()
+{
+    if (!GuardPawn || !HasValidTarget() || !GetWorld())
+    {
+        return;
+    }
+    if (UGPEncounterSubsystem* Encounter = GetWorld()->GetSubsystem<UGPEncounterSubsystem>())
+    {
+        Encounter->ReportContact(GuardPawn, TargetActor, LastKnownLocation);
+    }
+}
+
 void AGPGuardAIController::ReleaseFireToken()
 {
-    if (!bOwnsFireToken || !GetWorld()) return;
+    if (!GetWorld()) return;
     if (UGPEncounterSubsystem* Encounter = GetWorld()->GetSubsystem<UGPEncounterSubsystem>())
     {
         Encounter->ReleaseFireToken(GuardPawn);
     }
     bOwnsFireToken = false;
+}
+
+void AGPGuardAIController::ReleaseMeleeToken()
+{
+    if (!GetWorld()) return;
+    if (UGPEncounterSubsystem* Encounter = GetWorld()->GetSubsystem<UGPEncounterSubsystem>())
+    {
+        Encounter->ReleaseMeleeToken(GuardPawn);
+    }
+    bOwnsMeleeToken = false;
 }
 
 bool AGPGuardAIController::HasValidTarget() const
@@ -304,4 +562,33 @@ bool AGPGuardAIController::HasValidTarget() const
 bool AGPGuardAIController::CanSeeTarget() const
 {
     return bHasSightStimulus && HasValidTarget() && LineOfSightTo(TargetActor);
+}
+
+float AGPGuardAIController::GetDesiredRangeForRole(EGPGuardTacticalRole Role)
+{
+    switch (Role)
+    {
+        case EGPGuardTacticalRole::Pressure:
+            return 760.0f;
+        case EGPGuardTacticalRole::FlankLeft:
+        case EGPGuardTacticalRole::FlankRight:
+            return 1050.0f;
+        case EGPGuardTacticalRole::Support:
+            return 1325.0f;
+        default:
+            return 1000.0f;
+    }
+}
+
+int32 AGPGuardAIController::GetBurstSizeForDistance(float Distance)
+{
+    if (Distance < 650.0f)
+    {
+        return 2;
+    }
+    if (Distance > 1400.0f)
+    {
+        return 4;
+    }
+    return 3;
 }

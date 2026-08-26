@@ -2,6 +2,7 @@
 
 #include "CoreMinimal.h"
 #include "AIController.h"
+#include "AI/GPEncounterSubsystem.h"
 #include "Perception/AIPerceptionTypes.h"
 #include "GPGuardAIController.generated.h"
 
@@ -17,8 +18,10 @@ enum class EGPGuardState : uint8
     Suspicious,
     Investigate,
     Engage,
+    Reposition,
     Telegraph,
     FireBurst,
+    Reload,
     Stagger,
     MeleeWindup,
     Dead
@@ -35,6 +38,12 @@ public:
 
     UFUNCTION(BlueprintPure, Category="AI")
     EGPGuardState GetGuardState() const { return GuardState; }
+
+    UFUNCTION(BlueprintPure, Category="AI")
+    EGPGuardTacticalRole GetTacticalRole() const { return TacticalRole; }
+
+    static float GetDesiredRangeForRole(EGPGuardTacticalRole Role);
+    static int32 GetBurstSizeForDistance(float Distance);
 
     void NotifyDamaged(AActor* DamageCauser);
     void NotifyGuardDeath();
@@ -64,7 +73,12 @@ private:
     void TickPatrol(float Now);
     void TickInvestigate(float Now);
     void TickCombat(float Now);
+    void TickReposition(float Now);
+    void BeginReposition(float Now, bool bForcedBySuppression);
+    void TryAcquireSharedContact();
+    void ReportContactToSquad();
     void ReleaseFireToken();
+    void ReleaseMeleeToken();
     bool HasValidTarget() const;
     bool CanSeeTarget() const;
 
@@ -80,7 +94,13 @@ private:
     float NextDecisionTime = 0.0f;
     float NextAttackTime = 0.0f;
     float LastContactTime = -100.0f;
+    float NextRepositionTime = 0.0f;
     int32 BurstRoundsRemaining = 0;
+    int32 CompletedBursts = 0;
+    uint32 LastObservedSuppressionSerial = 0;
     bool bOwnsFireToken = false;
+    bool bOwnsMeleeToken = false;
     bool bHasSightStimulus = false;
+    EGPGuardTacticalRole TacticalRole = EGPGuardTacticalRole::Pressure;
+    FRandomStream CombatRandom;
 };
