@@ -12,8 +12,12 @@ if (( EUID != 0 )); then
   exit 1
 fi
 
-git -C /opt/gorilla-protocol fetch --depth 1 origin main
-git -C /opt/gorilla-protocol checkout --detach FETCH_HEAD
+if [[ "$(git -C /opt/gorilla-protocol rev-parse --is-shallow-repository)" == "true" ]]; then
+  git -C /opt/gorilla-protocol fetch --unshallow origin
+else
+  git -C /opt/gorilla-protocol fetch origin main
+fi
+git -C /opt/gorilla-protocol checkout --detach origin/main
 /opt/gorilla-protocol/Hosting/bin/install_host_services.sh
 install -o root -g gorilla-stream -m 640 \
   "${env_file}" /opt/gorilla-protocol/Hosting/.env
