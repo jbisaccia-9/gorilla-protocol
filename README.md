@@ -1,5 +1,10 @@
 # Gorilla Golden Eye: Operazione Banana
 
+> **Historical iteration:** active development and the live UE5 cloud release
+> have moved to [Gorilla Protocol](https://github.com/jbisaccia-9/gorilla-protocol).
+> This repository is retained only as the original WebGL history and is also
+> preserved under `archive/webgl-classic/` in the unified repository.
+
 A browser-native 3D first-person shooter starring Gori Kongo, an original
 Italian-speaking gorilla secret agent. The game carries a classic console-spy
 framework into a modern WebGL presentation with desktop and touch controls.
