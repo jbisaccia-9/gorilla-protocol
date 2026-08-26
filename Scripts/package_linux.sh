@@ -11,6 +11,7 @@ OUTPUT_ARCHIVE="${ROOT}/Artifacts/GorillaProtocol-Linux.tar.gz"
 
 test -x "${UAT}" || { echo "RunUAT.sh not found under UE_ROOT." >&2; exit 1; }
 command -v tar >/dev/null || { echo "tar is required." >&2; exit 1; }
+command -v git >/dev/null || { echo "git is required." >&2; exit 1; }
 test -s "${ROOT}/Content/GorillaProtocol/Maps/L_Boot.umap" || {
   echo "Missing boot map. Run ./Scripts/bootstrap_project.sh first." >&2
   exit 1
@@ -26,5 +27,17 @@ test -x "${PACKAGE_DIR}/GorillaProtocol.sh" || {
   exit 1
 }
 
+build_commit="$(git -C "${ROOT}" rev-parse HEAD)"
+build_state="$(git -C "${ROOT}" describe --always --dirty)"
+build_time="$(date -u '+%Y-%m-%dT%H:%M:%SZ')"
+cat >"${PACKAGE_DIR}/GORILLA_BUILD.txt" <<EOF
+project=Gorilla Protocol
+engine=Unreal Engine 5.8
+commit=${build_commit}
+source_state=${build_state}
+built_utc=${build_time}
+EOF
+
 tar -C "${PACKAGE_DIR}" -czf "${OUTPUT_ARCHIVE}" .
 echo "Cloud upload archive created: ${OUTPUT_ARCHIVE}"
+echo "Build manifest: ${build_state} at ${build_time}"

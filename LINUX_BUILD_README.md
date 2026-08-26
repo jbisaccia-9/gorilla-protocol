@@ -77,6 +77,10 @@ The command performs the complete build pipeline:
 5. Builds, cooks, stages, and packages the Linux Shipping game.
 6. Creates the compressed cloud-upload archive and its SHA-256 checksum.
 
+The archive also contains `GORILLA_BUILD.txt`, which records the exact Git commit,
+source state, UE version, and UTC build time. Cloud upload validates this manifest
+so an older unidentifiable package cannot silently replace the current release.
+
 The first build can take a long time while Unreal compiles code and shaders. Keep
 the Terminal open until it prints `Linux Shipping archive ready`.
 

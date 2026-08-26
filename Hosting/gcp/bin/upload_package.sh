@@ -16,6 +16,12 @@ if grep -Eq '(^/|(^|/)\.\.(/|$))' < <(tar -tzf "${archive}"); then
   die "Archive contains an unsafe absolute or parent path."
 fi
 
+build_info="$(tar -xOzf "${archive}" ./GORILLA_BUILD.txt 2>/dev/null || true)"
+test -n "${build_info}" || die "Archive is missing GORILLA_BUILD.txt. Rebuild it with Scripts/build_linux_shipping.sh."
+grep -Eq '^commit=[0-9a-f]{40}$' <<<"${build_info}" || die "Archive build manifest has an invalid commit."
+echo "Uploading verified build:"
+echo "${build_info}"
+
 gcloud compute scp "${archive}" "${GCP_VM_NAME}:/tmp/gorilla-package.tar.gz" \
   --project="${GCP_PROJECT_ID}" --zone="${GCP_ZONE}" --tunnel-through-iap
 
