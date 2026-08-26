@@ -71,11 +71,26 @@ require_apply() {
 
 require_stream_config() {
   : "${STREAM_DOMAIN:?Set STREAM_DOMAIN in Hosting/gcp/gcp.env}"
+  TURN_TTL="${TURN_TTL:-3600}"
+  STREAM_WIDTH="${STREAM_WIDTH:-1600}"
+  STREAM_HEIGHT="${STREAM_HEIGHT:-900}"
+  STREAM_FPS="${STREAM_FPS:-60}"
+  STREAM_MIN_BITRATE="${STREAM_MIN_BITRATE:-500000}"
+  STREAM_START_BITRATE="${STREAM_START_BITRATE:-6000000}"
+  STREAM_MAX_BITRATE="${STREAM_MAX_BITRATE:-8000000}"
+
   [[ "${STREAM_DOMAIN}" == "auto" || "${STREAM_DOMAIN}" =~ ^[A-Za-z0-9.-]+$ ]] || die "STREAM_DOMAIN is invalid."
   [[ "${GAME_BINARY:-/opt/gorilla-game/GorillaProtocol.sh}" =~ ^/[A-Za-z0-9._/-]+$ ]] || die "GAME_BINARY must be a safe absolute path without spaces."
-  [[ "${TURN_TTL:-3600}" =~ ^[0-9]+$ ]] || die "TURN_TTL must be an integer."
-  [[ "${STREAM_WIDTH:-1920}" =~ ^[0-9]+$ ]] || die "STREAM_WIDTH must be an integer."
-  [[ "${STREAM_HEIGHT:-1080}" =~ ^[0-9]+$ ]] || die "STREAM_HEIGHT must be an integer."
+  [[ "${TURN_TTL}" =~ ^[0-9]+$ ]] || die "TURN_TTL must be an integer."
+  [[ "${STREAM_WIDTH}" =~ ^[0-9]+$ ]] || die "STREAM_WIDTH must be an integer."
+  [[ "${STREAM_HEIGHT}" =~ ^[0-9]+$ ]] || die "STREAM_HEIGHT must be an integer."
+  [[ "${STREAM_FPS}" =~ ^[0-9]+$ ]] || die "STREAM_FPS must be an integer."
+  [[ "${STREAM_MIN_BITRATE}" =~ ^[0-9]+$ ]] || die "STREAM_MIN_BITRATE must be an integer."
+  [[ "${STREAM_START_BITRATE}" =~ ^[0-9]+$ ]] || die "STREAM_START_BITRATE must be an integer."
+  [[ "${STREAM_MAX_BITRATE}" =~ ^[0-9]+$ ]] || die "STREAM_MAX_BITRATE must be an integer."
+  (( STREAM_FPS >= 30 && STREAM_FPS <= 120 )) || die "STREAM_FPS must be between 30 and 120."
+  (( STREAM_MIN_BITRATE <= STREAM_START_BITRATE )) || die "STREAM_MIN_BITRATE must not exceed STREAM_START_BITRATE."
+  (( STREAM_START_BITRATE <= STREAM_MAX_BITRATE )) || die "STREAM_START_BITRATE must not exceed STREAM_MAX_BITRATE."
 }
 
 quota_record() {

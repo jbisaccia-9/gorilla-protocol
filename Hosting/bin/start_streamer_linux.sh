@@ -15,12 +15,28 @@ GAME_BINARY="${1:-${GAME_BINARY:-}}"
 test -x "${GAME_BINARY}" || { echo "Game binary is not executable: ${GAME_BINARY}" >&2; exit 1; }
 
 STREAMER_URL="${STREAMER_URL:-ws://127.0.0.1:8888}"
-STREAM_WIDTH="${STREAM_WIDTH:-1920}"
-STREAM_HEIGHT="${STREAM_HEIGHT:-1080}"
+STREAM_WIDTH="${STREAM_WIDTH:-1600}"
+STREAM_HEIGHT="${STREAM_HEIGHT:-900}"
+STREAM_FPS="${STREAM_FPS:-60}"
+STREAM_MIN_BITRATE="${STREAM_MIN_BITRATE:-500000}"
+STREAM_START_BITRATE="${STREAM_START_BITRATE:-6000000}"
+STREAM_MAX_BITRATE="${STREAM_MAX_BITRATE:-8000000}"
 STREAMER_WAIT_SECONDS="${STREAMER_WAIT_SECONDS:-120}"
 
-[[ "${STREAMER_WAIT_SECONDS}" =~ ^[0-9]+$ ]] || {
-  echo "STREAMER_WAIT_SECONDS must be an integer." >&2
+for setting in STREAM_WIDTH STREAM_HEIGHT STREAM_FPS STREAM_MIN_BITRATE STREAM_START_BITRATE STREAM_MAX_BITRATE STREAMER_WAIT_SECONDS; do
+  value="${!setting}"
+  [[ "${value}" =~ ^[0-9]+$ ]] || {
+    echo "${setting} must be an integer." >&2
+    exit 1
+  }
+done
+
+(( STREAM_MIN_BITRATE <= STREAM_START_BITRATE )) || {
+  echo "STREAM_MIN_BITRATE must not exceed STREAM_START_BITRATE." >&2
+  exit 1
+}
+(( STREAM_START_BITRATE <= STREAM_MAX_BITRATE )) || {
+  echo "STREAM_START_BITRATE must not exceed STREAM_MAX_BITRATE." >&2
   exit 1
 }
 
@@ -35,5 +51,11 @@ done
 
 exec "${GAME_BINARY}" \
   -PixelStreamingURL="${STREAMER_URL}" \
+  -PixelStreamingWebRTCMaxFps="${STREAM_FPS}" \
+  -PixelStreamingWebRTCMinBitrate="${STREAM_MIN_BITRATE}" \
+  -PixelStreamingWebRTCStartBitrate="${STREAM_START_BITRATE}" \
+  -PixelStreamingWebRTCMaxBitrate="${STREAM_MAX_BITRATE}" \
+  -PixelStreamingWebRTCDegradationPreference=MAINTAIN_FRAMERATE \
   -RenderOffscreen -ForceRes -ResX="${STREAM_WIDTH}" -ResY="${STREAM_HEIGHT}" \
+  "-ExecCmds=t.MaxFPS ${STREAM_FPS},r.MotionBlurQuality 0" \
   -AudioMixer -Unattended -StdOut -FullStdOutLogOutput
