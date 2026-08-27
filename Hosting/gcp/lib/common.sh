@@ -72,8 +72,9 @@ require_apply() {
 require_stream_config() {
   : "${STREAM_DOMAIN:?Set STREAM_DOMAIN in Hosting/gcp/gcp.env}"
   TURN_TTL="${TURN_TTL:-3600}"
-  STREAM_WIDTH="${STREAM_WIDTH:-1600}"
-  STREAM_HEIGHT="${STREAM_HEIGHT:-900}"
+  STREAM_CODEC="${STREAM_CODEC:-H264}"
+  STREAM_WIDTH="${STREAM_WIDTH:-1280}"
+  STREAM_HEIGHT="${STREAM_HEIGHT:-720}"
   STREAM_FPS="${STREAM_FPS:-60}"
   STREAM_MIN_BITRATE="${STREAM_MIN_BITRATE:-500000}"
   STREAM_START_BITRATE="${STREAM_START_BITRATE:-6000000}"
@@ -81,6 +82,7 @@ require_stream_config() {
 
   [[ "${STREAM_DOMAIN}" == "auto" || "${STREAM_DOMAIN}" =~ ^[A-Za-z0-9.-]+$ ]] || die "STREAM_DOMAIN is invalid."
   [[ "${GAME_BINARY:-/opt/gorilla-game/GorillaProtocol.sh}" =~ ^/[A-Za-z0-9._/-]+$ ]] || die "GAME_BINARY must be a safe absolute path without spaces."
+  [[ "${STREAM_CODEC}" == "H264" ]] || die "STREAM_CODEC must be H264 for hardware encoding and browser compatibility."
   [[ "${TURN_TTL}" =~ ^[0-9]+$ ]] || die "TURN_TTL must be an integer."
   [[ "${STREAM_WIDTH}" =~ ^[0-9]+$ ]] || die "STREAM_WIDTH must be an integer."
   [[ "${STREAM_HEIGHT}" =~ ^[0-9]+$ ]] || die "STREAM_HEIGHT must be an integer."

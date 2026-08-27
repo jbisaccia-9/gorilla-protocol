@@ -15,13 +15,19 @@ GAME_BINARY="${1:-${GAME_BINARY:-}}"
 test -x "${GAME_BINARY}" || { echo "Game binary is not executable: ${GAME_BINARY}" >&2; exit 1; }
 
 STREAMER_URL="${STREAMER_URL:-ws://127.0.0.1:8888}"
-STREAM_WIDTH="${STREAM_WIDTH:-1600}"
-STREAM_HEIGHT="${STREAM_HEIGHT:-900}"
+STREAM_CODEC="${STREAM_CODEC:-H264}"
+STREAM_WIDTH="${STREAM_WIDTH:-1280}"
+STREAM_HEIGHT="${STREAM_HEIGHT:-720}"
 STREAM_FPS="${STREAM_FPS:-60}"
 STREAM_MIN_BITRATE="${STREAM_MIN_BITRATE:-500000}"
 STREAM_START_BITRATE="${STREAM_START_BITRATE:-6000000}"
 STREAM_MAX_BITRATE="${STREAM_MAX_BITRATE:-8000000}"
 STREAMER_WAIT_SECONDS="${STREAMER_WAIT_SECONDS:-120}"
+
+[[ "${STREAM_CODEC}" == "H264" ]] || {
+  echo "STREAM_CODEC must be H264 for the hardware-encoded public stream." >&2
+  exit 1
+}
 
 for setting in STREAM_WIDTH STREAM_HEIGHT STREAM_FPS STREAM_MIN_BITRATE STREAM_START_BITRATE STREAM_MAX_BITRATE STREAMER_WAIT_SECONDS; do
   value="${!setting}"
@@ -51,6 +57,8 @@ done
 
 exec "${GAME_BINARY}" \
   -PixelStreamingURL="${STREAMER_URL}" \
+  -PixelStreamingEncoderCodec="${STREAM_CODEC}" \
+  -PixelStreamingEncoderRateControl=CBR \
   -PixelStreamingWebRTCMaxFps="${STREAM_FPS}" \
   -PixelStreamingWebRTCMinBitrate="${STREAM_MIN_BITRATE}" \
   -PixelStreamingWebRTCStartBitrate="${STREAM_START_BITRATE}" \

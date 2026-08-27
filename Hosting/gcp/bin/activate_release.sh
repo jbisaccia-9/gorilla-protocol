@@ -21,6 +21,10 @@ git -C /opt/gorilla-protocol checkout --detach origin/main
 /opt/gorilla-protocol/Hosting/bin/install_host_services.sh
 install -o root -g gorilla-stream -m 640 \
   "${env_file}" /opt/gorilla-protocol/Hosting/.env
+sudo -u gorilla-stream test -r /opt/gorilla-protocol/Hosting/.env || {
+  echo "Installed Hosting/.env is not readable by gorilla-stream." >&2
+  exit 1
+}
 /opt/gorilla-protocol/Hosting/bin/start_stack.sh
 systemctl restart gorilla-streamer.service
 
