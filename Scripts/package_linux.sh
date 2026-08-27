@@ -12,10 +12,7 @@ OUTPUT_ARCHIVE="${ROOT}/Artifacts/GorillaProtocol-Linux.tar.gz"
 test -x "${UAT}" || { echo "RunUAT.sh not found under UE_ROOT." >&2; exit 1; }
 command -v tar >/dev/null || { echo "tar is required." >&2; exit 1; }
 command -v git >/dev/null || { echo "git is required." >&2; exit 1; }
-test -s "${ROOT}/Content/GorillaProtocol/Maps/L_Boot.umap" || {
-  echo "Missing boot map. Run ./Scripts/bootstrap_project.sh first." >&2
-  exit 1
-}
+"${ROOT}/Scripts/validate_vertical_slice.sh"
 
 "${UAT}" BuildCookRun \
   -project="${PROJECT}" -noP4 -platform=Linux -clientconfig=Shipping \
@@ -36,6 +33,7 @@ engine=Unreal Engine 5.8
 commit=${build_commit}
 source_state=${build_state}
 built_utc=${build_time}
+content_gate=passed
 EOF
 
 tar -C "${PACKAGE_DIR}" -czf "${OUTPUT_ARCHIVE}" .

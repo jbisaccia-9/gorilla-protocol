@@ -30,7 +30,6 @@ cd "${ROOT}"
 git lfs pull
 "${SETUP_TOOLCHAIN}"
 "${BUILD}" GorillaProtocolEditor Linux Development "${PROJECT}" -WaitMutex
-"${ROOT}/Scripts/bootstrap_project.sh"
 "${ROOT}/Scripts/validate_project.sh"
 "${ROOT}/Scripts/package_linux.sh"
 

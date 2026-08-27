@@ -4,6 +4,10 @@ This directory prepares Gorilla Protocol for Epic's UE5.8 Pixel Streaming 2
 stack. Epic supplies the Unreal plugin, browser frontend, and reference signaling
 software; Epic does not run a public game host for this repository.
 
+The active rebuild is not deployed. The GCP VM is stopped, and these scripts stay
+dormant until a local packaged build passes `Scripts/validate_vertical_slice.sh`
+and the gameplay acceptance bar in `Docs/VERTICAL_SLICE.md`.
+
 The production path is:
 
 1. Package the Unreal project for Windows or Linux on a machine with UE5.8.
@@ -11,7 +15,7 @@ The production path is:
 3. Point a DNS name at that host and open the required firewall ports.
 4. Run the HTTPS, signaling, STUN, and TURN stack from this directory.
 5. Launch the packaged game against the private signaling WebSocket.
-6. Link the README Play Now badge to the resulting HTTPS address.
+6. Publish a link only after the local build and a separate streaming soak pass.
 
 ## Included
 
@@ -43,7 +47,7 @@ this repository.
 - Docker Engine with Compose for the Linux reference stack
 - A public static IPv4 address; custom DNS is optional
 - A packaged Gorilla Protocol build produced by UE5.8
-- At least 16 GB RAM for the graybox; production assets will require more
+- At least 32 GB RAM for the production vertical slice
 
 Public firewall rules for the single-host baseline:
 
@@ -100,9 +104,9 @@ start the packaged game with:
 ## Packaging
 
 Linux and Windows packaging commands are provided in `Scripts/package_linux.sh`
-and `Scripts/package_windows.ps1`. Both refuse to package until the boot map has
-been generated and committed. Use `Scripts/bootstrap_project.sh` on macOS/Linux
-or `Scripts/bootstrap_project.ps1` on Windows to create it.
+and `Scripts/package_windows.ps1`. Both refuse to package until every authored
+asset in `Build/VerticalSliceAssets.txt` exists and has a license-manifest row.
+There is no placeholder-map generator.
 
 ## Deployment Inputs
 
@@ -113,7 +117,5 @@ The repository cannot invent or charge these resources:
 - DNS name and permission to modify its record
 - UE5.8 installation and a successfully packaged game artifact
 
-The guarded Google Cloud setup currently supplies these inputs for the public
-demo. A newly packaged Linux build must still be uploaded whenever Unreal source
-changes should appear in the browser; host-script changes can be deployed without
-repackaging the game.
+The guarded Google Cloud setup preserves these inputs for a future approved build.
+Do not start the VM or upload another package to evaluate unfinished gameplay.

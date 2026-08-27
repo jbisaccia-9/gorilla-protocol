@@ -13,12 +13,11 @@ IAP-only SSH rule, browser-streaming firewall rules, static address, approved L4
 quotas, and one `g2-standard-8` L4 host. The NVIDIA RTX Virtual Workstation driver
 is installed and permanently licensed, and the idle-shutdown timer is active.
 
-The Linux Shipping build is deployed and verified through the public HTTPS Pixel
-Streaming page. The host powers off after ten minutes without an established player
-and has a hard two-hour runtime limit per boot. Stopping it ends hourly VM, GPU, and
-workstation-license charges; the 150 GB persistent disk and reserved address remain
-billable. A stopped host must be started by the operator before the public page will
-respond.
+The rejected Linux prototype remains on disk only as historical infrastructure
+state. Its VM is intentionally stopped and must not be restarted as a public demo.
+Stopping ends hourly VM, GPU, and workstation-license charges; the 150 GB disk and
+reserved address remain billable. A future upload starts only after the authored
+vertical slice passes local package and playtest approval.
 
 No project ID, account, token, TLS key, TURN secret, or packaged game is committed.
 Every action that can create resources, begin charges, deploy code, or delete
@@ -98,6 +97,9 @@ manual DNS record.
 
 ## Upload And Publish
 
+Do not run this section for the rebuild until `Scripts/validate_vertical_slice.sh`
+passes and the local packaged build is approved.
+
 Package the Linux build as a `.tar.gz`, then run:
 
 ```bash
@@ -119,8 +121,8 @@ future VM starts.
 ./Hosting/gcp/bin/destroy.sh --apply your-gcp-project-id
 ```
 
-Do not use Spot for the public demo: an interruption immediately ends the player's
-session. Standard provisioning is intentional for this single-instance baseline.
+Do not use Spot for a future approved stream: an interruption immediately ends
+the player's session. Standard provisioning is intentional for this baseline.
 
 The idle guard treats an established HTTPS/WebSocket player connection as active.
 Health checks do not keep the host running for more than their brief connection.

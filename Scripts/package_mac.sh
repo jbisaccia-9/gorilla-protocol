@@ -6,10 +6,7 @@ ROOT="$(cd "$(dirname "$0")/.." && pwd)"
 PROJECT="${ROOT}/GorillaProtocol.uproject"
 UAT="${UE_ROOT}/Engine/Build/BatchFiles/RunUAT.sh"
 
-test -s "${ROOT}/Content/GorillaProtocol/Maps/L_Boot.umap" || {
-  echo "Missing boot map. Run ./Scripts/bootstrap_project.sh first." >&2
-  exit 1
-}
+"${ROOT}/Scripts/validate_vertical_slice.sh"
 
 "${UAT}" BuildCookRun \
   -project="${PROJECT}" -platform=Mac -clientconfig=Development \

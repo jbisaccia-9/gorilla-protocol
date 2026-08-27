@@ -11,22 +11,9 @@ public class GorillaProtocol : ModuleRules
             "Core",
             "CoreUObject",
             "Engine",
-            "InputCore",
             "EnhancedInput",
-            "AIModule",
-            "GameplayTasks",
-            "NavigationSystem",
             "GameplayTags",
-            "StateTreeModule",
-            "GameplayStateTreeModule",
-            "Niagara",
             "UMG"
-        });
-
-        PrivateDependencyModuleNames.AddRange(new string[]
-        {
-            "Slate",
-            "SlateCore"
         });
     }
 }

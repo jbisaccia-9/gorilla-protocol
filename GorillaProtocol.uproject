@@ -20,6 +20,22 @@
       "Enabled": true
     },
     {
+      "Name": "CommonUI",
+      "Enabled": true
+    },
+    {
+      "Name": "ControlRig",
+      "Enabled": true
+    },
+    {
+      "Name": "MotionWarping",
+      "Enabled": true
+    },
+    {
+      "Name": "PoseSearch",
+      "Enabled": true
+    },
+    {
       "Name": "PixelStreaming2",
       "Enabled": true
     },

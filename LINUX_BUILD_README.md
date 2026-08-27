@@ -1,22 +1,12 @@
 # Build The Linux Shipping Package
 
-Use this guide on the Linux PC. It creates the single archive needed to publish
-Gorilla Protocol through the existing Google Cloud Pixel Streaming host.
+This workflow runs only after the authored vertical slice passes its content and
+license gate. It no longer generates a placeholder map or substitutes proxy art.
 
-## Before You Start
+## 1. Prepare The Linux Workstation
 
-- Ubuntu 22.04 is recommended.
-- Use a machine with at least 32 GB RAM and 200 GB free SSD space.
-- Install the latest stable Vulkan driver for the machine's NVIDIA or AMD GPU.
-- Sign in at Epic's [Unreal Engine for Linux](https://www.unrealengine.com/en-US/linux)
-  page, download the precompiled Unreal Engine 5.8 Linux ZIP, and extract it to
-  `$HOME/Unreal/UE_5.8`.
-
-If the Engine was extracted elsewhere, change `UE_ROOT` in step 3.
-
-## 1. Install The Build Tools
-
-Open Terminal and run:
+Use a Linux PC with at least 32 GB RAM, 200 GB free SSD space, a current Vulkan
+driver, Git LFS, and the Epic Unreal Engine 5.8 Linux distribution.
 
 ```bash
 sudo apt update
@@ -24,9 +14,9 @@ sudo apt install -y build-essential git git-lfs python3 unzip vulkan-tools
 git lfs install
 ```
 
-## 2. Download Gorilla Protocol
+Extract Unreal Engine to `$HOME/Unreal/UE_5.8`, or adjust `UE_ROOT` below.
 
-For a new checkout, run:
+## 2. Get The Active Rebuild
 
 ```bash
 mkdir -p "$HOME/Projects"
@@ -34,83 +24,63 @@ cd "$HOME/Projects"
 git clone https://github.com/jbisaccia-9/gorilla-protocol.git
 cd gorilla-protocol
 git lfs pull
+export UE_ROOT="$HOME/Unreal/UE_5.8"
 ```
 
-If the repository already exists on the Linux PC, update it instead:
+For an existing checkout:
 
 ```bash
 cd "$HOME/Projects/gorilla-protocol"
 git pull --ff-only
 git lfs pull
+export UE_ROOT="$HOME/Unreal/UE_5.8"
 ```
 
-## 3. Verify Unreal Engine 5.8
-
-Run:
+## 3. Build And Author Content
 
 ```bash
-export UE_ROOT="$HOME/Unreal/UE_5.8"
-test -x "$UE_ROOT/Engine/Binaries/Linux/UnrealEditor"
-test -x "$UE_ROOT/Engine/Build/BatchFiles/Linux/Build.sh"
-test -x "$UE_ROOT/Engine/Build/BatchFiles/Linux/SetupToolchain.sh"
+./Scripts/build_editor.sh
+"$UE_ROOT/Engine/Binaries/Linux/UnrealEditor" GorillaProtocol.uproject
 ```
 
-No output means the checks passed. If a check fails, correct `UE_ROOT` before
-continuing.
+Author the map, character, animation, weapon, AI, UI, VFX, audio, and input assets
+listed in `Build/VerticalSliceAssets.txt`. Add each committed asset to
+`Licenses/AssetManifest.csv`. Do not proceed with proxy content.
+
+Check readiness from Terminal:
+
+```bash
+./Scripts/validate_project.sh
+./Scripts/validate_vertical_slice.sh
+```
+
+The second command is supposed to fail until all production content exists.
 
 ## 4. Build The Upload Archive
 
-From the repository directory, run:
+After local packaged gameplay meets `Docs/VERTICAL_SLICE.md`:
 
 ```bash
-cd "$HOME/Projects/gorilla-protocol"
-export UE_ROOT="$HOME/Unreal/UE_5.8"
 ./Scripts/build_linux_shipping.sh
 ```
 
-The command performs the complete build pipeline:
-
-1. Installs Epic's UE5.8 Linux toolchain.
-2. Compiles the Gorilla Protocol editor module.
-3. Generates the required `L_Boot.umap` startup map.
-4. Runs the repository validation checks.
-5. Builds, cooks, stages, and packages the Linux Shipping game.
-6. Creates the compressed cloud-upload archive and its SHA-256 checksum.
-
-The archive also contains `GORILLA_BUILD.txt`, which records the exact Git commit,
-source state, UE version, and UTC build time. Cloud upload validates this manifest
-so an older unidentifiable package cannot silently replace the current release.
-
-The first build can take a long time while Unreal compiles code and shaders. Keep
-the Terminal open until it prints `Linux Shipping archive ready`.
-
-## 5. Return This File
-
-The finished file is:
+This command configures Epic's Linux toolchain, compiles the Editor target, runs
+source and production-asset validation, cooks the authored map, packages Shipping,
+and creates:
 
 ```text
 $HOME/Projects/gorilla-protocol/Artifacts/GorillaProtocol-Linux.tar.gz
-```
-
-Return that `.tar.gz` file. Do not return the Unreal Engine ZIP, the entire project
-directory, credentials, or Google Cloud configuration files.
-
-The checksum is stored beside it at:
-
-```text
 $HOME/Projects/gorilla-protocol/Artifacts/GorillaProtocol-Linux.tar.gz.sha256
 ```
 
-## Common Errors
+`GORILLA_BUILD.txt` inside the archive records the exact Git commit, source state,
+UE version, build time, and `content_gate=passed`. Cloud upload remains a separate
+decision after local quality approval.
 
-- `UnrealEditor not found`: `UE_ROOT` does not point to the extracted UE5.8 folder.
-- `git: 'lfs' is not a git command`: rerun the package installation in step 1.
-- Vulkan or renderer errors: update the GPU driver and verify `vulkaninfo --summary`.
-- Out-of-memory or disk errors: close other applications and confirm free space with
-  `df -h "$HOME"` and memory with `free -h`.
-- Missing `L_Boot.umap`: rerun `./Scripts/build_linux_shipping.sh`; do not skip the
-  editor compilation stage.
+Common failures:
 
-Epic's current setup references are the
-[Linux development quickstart](https://dev.epicgames.com/documentation/unreal-engine/linux-development-quickstart-for-unreal-engine)
-and [Linux development requirements](https://dev.epicgames.com/documentation/unreal-engine/linux-development-requirements-for-unreal-engine).
+- `Missing production asset`: finish the named authored asset; do not bypass the gate.
+- `not licensed`: add a complete `AssetManifest.csv` row and retain proof privately.
+- `UnrealEditor not found`: correct `UE_ROOT`.
+- Vulkan errors: update the GPU driver and run `vulkaninfo --summary`.
+- Memory or disk errors: verify `free -h` and `df -h "$HOME"`.
