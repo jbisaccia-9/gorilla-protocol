@@ -1,20 +1,21 @@
 #!/usr/bin/env bash
 set -euo pipefail
 
-: "${UE_ROOT:?Set UE_ROOT to the Unreal Engine installation directory}"
 ROOT="$(cd "$(dirname "$0")/.." && pwd)"
 PROJECT="${ROOT}/GorillaProtocol.uproject"
+source "${ROOT}/Scripts/resolve_unreal_root.sh"
+resolve_unreal_root Linux
 UAT="${UE_ROOT}/Engine/Build/BatchFiles/RunUAT.sh"
 ARCHIVE_DIR="${ROOT}/Artifacts/Linux-Shipping"
 PACKAGE_DIR="${ARCHIVE_DIR}/Linux"
 OUTPUT_ARCHIVE="${ROOT}/Artifacts/GorillaProtocol-Linux.tar.gz"
 
-test -x "${UAT}" || { echo "RunUAT.sh not found under UE_ROOT." >&2; exit 1; }
+test -f "${UAT}" || { echo "RunUAT.sh not found under UE_ROOT: ${UAT}" >&2; exit 1; }
 command -v tar >/dev/null || { echo "tar is required." >&2; exit 1; }
 command -v git >/dev/null || { echo "git is required." >&2; exit 1; }
 "${ROOT}/Scripts/validate_vertical_slice.sh"
 
-"${UAT}" BuildCookRun \
+bash "${UAT}" BuildCookRun \
   -project="${PROJECT}" -noP4 -platform=Linux -clientconfig=Shipping \
   -build -cook -stage -pak -iostore -compressed -prereqs -archive \
   -archivedirectory="${ARCHIVE_DIR}" -utf8output

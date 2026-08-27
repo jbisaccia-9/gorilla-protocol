@@ -24,7 +24,6 @@ cd "$HOME/Projects"
 git clone https://github.com/jbisaccia-9/gorilla-protocol.git
 cd gorilla-protocol
 git lfs pull
-export UE_ROOT="$HOME/Unreal/UE_5.8"
 ```
 
 For an existing checkout:
@@ -33,15 +32,18 @@ For an existing checkout:
 cd "$HOME/Projects/gorilla-protocol"
 git pull --ff-only
 git lfs pull
-export UE_ROOT="$HOME/Unreal/UE_5.8"
 ```
 
 ## 3. Build And Author Content
 
 ```bash
 ./Scripts/build_editor.sh
-"$UE_ROOT/Engine/Binaries/Linux/UnrealEditor" GorillaProtocol.uproject
+./Scripts/open_editor.sh
 ```
+
+The scripts detect common Unreal Engine locations. If needed, point them to the
+actual extracted Engine directory with
+`export UE_ROOT="/absolute/path/to/UE_5.8"`.
 
 Author the map, character, animation, weapon, AI, UI, VFX, audio, and input assets
 listed in `Build/VerticalSliceAssets.txt`. Add each committed asset to

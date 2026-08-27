@@ -34,10 +34,17 @@ cd "$HOME/Projects/gorilla-protocol"
 git status
 git lfs install
 git lfs checkout
-export UE_ROOT="$HOME/Unreal/UE_5.8"
 ./Scripts/validate_project.sh
 ./Scripts/build_editor.sh
-"$UE_ROOT/Engine/Binaries/Linux/UnrealEditor" GorillaProtocol.uproject
+./Scripts/open_editor.sh
+```
+
+The scripts automatically find common Unreal Engine locations. If detection
+fails, set the actual extracted Engine directory, not the project directory:
+
+```bash
+export UE_ROOT="/absolute/path/to/UE_5.8"
+./Scripts/build_editor.sh
 ```
 
 The approved 3D direction is `Docs/Art/vertical-slice-visual-target.png`, with its

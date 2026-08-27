@@ -79,9 +79,8 @@ On Linux:
 ```bash
 git lfs install
 git lfs pull
-export UE_ROOT="$HOME/Unreal/UE_5.8"
 ./Scripts/build_editor.sh
-"$UE_ROOT/Engine/Binaries/Linux/UnrealEditor" GorillaProtocol.uproject
+./Scripts/open_editor.sh
 ```
 
 Create the authored assets at the exact paths in

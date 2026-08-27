@@ -39,5 +39,5 @@ fi
 ./Scripts/validate_project.sh
 
 printf '\nOffline checkout installed at:\n  %s\n' "$DEST_ROOT"
-printf 'Next: export UE_ROOT="$HOME/Unreal/UE_5.8"\n'
-printf 'Then: cd %q && ./Scripts/build_editor.sh\n' "$DEST_ROOT"
+printf 'Next: cd %q && ./Scripts/build_editor.sh\n' "$DEST_ROOT"
+printf 'Then: ./Scripts/open_editor.sh\n'
