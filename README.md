@@ -107,6 +107,9 @@ remain blocked until the content gate passes and a local packaged playtest meets
 the acceptance bar. Pixel Streaming is a delivery mechanism, not evidence of game
 quality.
 
+For a network-independent source handoff to the Linux workstation, use
+[`OFFLINE_REBUILD.md`](OFFLINE_REBUILD.md).
+
 ## Historical Iterations
 
 - `graybox-retired-2026-08-26` preserves the rejected UE procedural prototype.
