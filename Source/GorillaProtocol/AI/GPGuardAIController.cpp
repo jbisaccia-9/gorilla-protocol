@@ -6,6 +6,7 @@
 #include "Components/GPHealthComponent.h"
 #include "Components/GPWeaponComponent.h"
 #include "GameFramework/CharacterMovementComponent.h"
+#include "Game/GPMissionSubsystem.h"
 #include "NavigationSystem.h"
 #include "Navigation/PathFollowingComponent.h"
 #include "Perception/AIPerceptionComponent.h"
@@ -286,6 +287,13 @@ void AGPGuardAIController::EnterState(EGPGuardState NewState, float Duration)
         NewState == EGPGuardState::FireBurst)
     {
         GuardPawn->GetCharacterMovement()->MaxWalkSpeed = 360.0f;
+    }
+    if (NewState == EGPGuardState::Engage && GetWorld())
+    {
+        if (UGPMissionSubsystem* Mission = GetWorld()->GetSubsystem<UGPMissionSubsystem>())
+        {
+            Mission->RaiseAlert(EGPMissionAlertState::Alarm);
+        }
     }
     switch (NewState)
     {

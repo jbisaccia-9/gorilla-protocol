@@ -16,7 +16,18 @@ enum class EGPMissionPhase : uint8
     Failed
 };
 
+UENUM(BlueprintType)
+enum class EGPMissionAlertState : uint8
+{
+    Covert,
+    Suspicious,
+    Alarm,
+    Escape
+};
+
 DECLARE_DYNAMIC_MULTICAST_DELEGATE_ThreeParams(FGPMissionUpdated, EGPMissionPhase, Phase, int32, GuardsRemaining, bool, bCipherRecovered);
+DECLARE_DYNAMIC_MULTICAST_DELEGATE_TwoParams(FGPMissionPresentationUpdated, EGPMissionPhase, Phase,
+    EGPMissionAlertState, AlertState);
 
 UCLASS()
 class GORILLAPROTOCOL_API UGPMissionSubsystem : public UWorldSubsystem
@@ -40,6 +51,9 @@ public:
     UFUNCTION(BlueprintCallable, Category="Mission")
     void FailMission();
 
+    UFUNCTION(BlueprintCallable, Category="Mission|Presentation")
+    void RaiseAlert(EGPMissionAlertState RequestedState);
+
     UFUNCTION(BlueprintPure, Category="Mission")
     EGPMissionPhase GetPhase() const { return Phase; }
 
@@ -49,13 +63,31 @@ public:
     UFUNCTION(BlueprintPure, Category="Mission")
     bool IsCipherRecovered() const { return bCipherRecovered; }
 
+    UFUNCTION(BlueprintPure, Category="Mission|Presentation")
+    EGPMissionAlertState GetAlertState() const { return AlertState; }
+
+    UFUNCTION(BlueprintPure, Category="Mission|Presentation")
+    bool IsAlarmActive() const;
+
+    UFUNCTION(BlueprintPure, Category="Mission|Presentation")
+    FText GetObjectiveText() const;
+
+    static bool CanRecoverCipher(EGPMissionPhase CurrentPhase, bool bAlreadyRecovered);
+    static FText ResolveObjectiveText(EGPMissionPhase CurrentPhase);
+    static EGPMissionAlertState ResolveAlertEscalation(EGPMissionAlertState CurrentState,
+        EGPMissionAlertState RequestedState);
+
     UPROPERTY(BlueprintAssignable, Category="Mission")
     FGPMissionUpdated OnMissionUpdated;
+
+    UPROPERTY(BlueprintAssignable, Category="Mission|Presentation")
+    FGPMissionPresentationUpdated OnPresentationUpdated;
 
 private:
     void BroadcastState();
 
     EGPMissionPhase Phase = EGPMissionPhase::Infiltration;
+    EGPMissionAlertState AlertState = EGPMissionAlertState::Covert;
     bool bCipherRecovered = false;
     TSet<TWeakObjectPtr<AActor>> ActiveGuards;
     TArray<TWeakObjectPtr<AGPExtractionZone>> ExtractionZones;

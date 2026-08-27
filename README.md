@@ -16,6 +16,12 @@ The host powers off when idle, so the operator may need to start it before the
 link responds. Earlier Java and WebGL versions are preserved in this repository
 under [`archive/`](archive/).
 
+> **Release visibility:** the public stream currently serves the earlier graybox
+> package. Git pushes do not hot-reload an Unreal binary. The latest combat and
+> presentation source changes will appear only after a new Linux archive is built
+> with [`LINUX_BUILD_README.md`](LINUX_BUILD_README.md) and uploaded. Future
+> archives include a commit manifest so the deployed version can be verified.
+
 ## Current Status
 
 The repository contains a code-complete graybox framework, not finished AAA art.
@@ -24,20 +30,25 @@ It provides:
 - Lumen global illumination and reflections
 - Virtual Shadow Maps, TSR, Nanite-ready Windows settings, and Metal SM6
 - Runtime first-person input: move, look, fire, ADS, sprint, reload, and interact
-- Single-player health, magazine/reserve ammunition, weapon spread, and headshots
-- AI sight and hearing, patrol, investigation, telegraph, burst, stagger, retreat,
-  melee, and two-shooter coordination
-- A native HUD, runtime test arena, six hostile guards, cipher objective, and
-  timed extraction flow
-- Italian protagonist dialogue hooks for recorded voice and localized subtitles
+- Single-player health, magazine/reserve ammunition, deterministic bloom and
+  recoil, impact impulse, ADS spread, and headshots
+- AI sight and hearing, shared contact memory, pressure/flank/support roles,
+  fair firing and melee queues, telegraphed bursts, reload movement, suppression,
+  repositioning, stagger, and close attacks
+- A responsive espionage HUD, procedural gorilla forearms and weapon view model,
+  camera bob/landing/recoil feedback, contextual prompts, and damage treatment
+- An art-directed coastal facility with instanced architecture, docks, villas,
+  palms, cargo lanes, dynamic mission lighting, six guards, cipher, and extraction
+- Italian-only protagonist barks and localized subtitle hooks
 - Automated smoke-test scaffolding, offline validation, scalability profiles,
   Git LFS rules, and asset-license tracking
 - Pixel Streaming 2 integration plus a pinned UE5.8 signaling, HTTPS, and TURN
   deployment stack for a Linux GPU host
 
-The runtime arena uses Engine basic shapes only so the source project can boot
-without Marketplace content. Those shapes are test proxies and must be replaced
-before visual review.
+The runtime facility uses art-directed Engine primitives and shared materials so
+the project remains self-contained and performant in Pixel Streaming. It is a
+substantial presentation upgrade over the old graybox, but the primitive geometry
+is still proxy art rather than a substitute for authored console-grade assets.
 
 ## Required Production Assets
 
@@ -147,9 +158,9 @@ extraction marker. Eliminating every guard is optional.
 - `AI/`: perception, tactical state machine, and firing-token subsystem
 - `Game/`: game mode and mission state
 - `Interaction/`: cipher objective and extraction zone
-- `World/`: lighting stack and runtime graybox mission
-- `UI/`: native fallback HUD
-- `Tests/`: UE automation smoke tests
+- `World/`: coastal facility, instanced set dressing, lighting, and alert palette
+- `UI/`: responsive espionage HUD
+- `Tests/`: UE automation smoke, combat, and presentation tests
 - `Config/`: renderer, platform, navigation, input, tags, and scalability settings
 
 Gameplay state remains in C++. Blueprints should assemble presentation, animation,
