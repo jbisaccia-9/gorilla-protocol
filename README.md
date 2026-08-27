@@ -7,6 +7,9 @@ credible current-generation presentation, not a franchise imitation.
 
 ![Operazione Scimmia di Mare visual target](Docs/Art/vertical-slice-visual-target.png)
 
+This direction was approved on 2026-08-27. The binding shot breakdown and
+rejection criteria are in [`Docs/VISUAL_TARGET.md`](Docs/VISUAL_TARGET.md).
+
 ## Rebuild Status
 
 The procedural prototype was rejected and retired at Git tag
@@ -17,6 +20,7 @@ level, proxy gorilla, proxy guards, placeholder weapon, or canvas HUD.
 Current active work provides:
 
 - The authored mission and quality contract in [`Docs/VERTICAL_SLICE.md`](Docs/VERTICAL_SLICE.md)
+- The approved frame contract in [`Docs/VISUAL_TARGET.md`](Docs/VISUAL_TARGET.md)
 - The 3D, animation, audio, and licensing workflow in
   [`Docs/CONTENT_PIPELINE.md`](Docs/CONTENT_PIPELINE.md)
 - A minimal C++ experience bootstrap that refuses to create substitute art

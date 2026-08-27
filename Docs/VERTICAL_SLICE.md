@@ -7,8 +7,9 @@ seriously; the absurdity comes from Bruno solving it confidently as a gorilla.
 
 ![Vertical-slice visual target](Art/vertical-slice-visual-target.png)
 
-This image is a composition and quality target, not a production texture or a
-claim that the corresponding 3D assets exist.
+This direction was approved by the project owner on 2026-08-27. It is a
+composition and quality target, not a production texture or a claim that the
+corresponding 3D assets exist. `VISUAL_TARGET.md` defines the binding frame contract.
 
 ## Pillars
 
