@@ -8,8 +8,26 @@ credentials, generated caches, Unreal Engine, and the retired Shipping binary.
 
 ## On The Linux PC
 
-Copy the `gorilla-protocol` directory from the drive to a Linux SSD. Do not build
-directly on the flash drive.
+Open the flash drive in the file manager, open a Terminal in the
+`GorillaProtocol-Rebuild` folder, and run the location-independent installer:
+
+```bash
+bash gorilla-protocol/Scripts/install_offline_copy.sh
+```
+
+The installer copies the complete checkout, including its hidden `.git`
+directory and local Git LFS objects, to `$HOME/Projects/gorilla-protocol`. It
+refuses to overwrite a non-empty destination. Do not build directly on the flash
+drive.
+
+If only the backup archive is available, extract it first and run the same
+command from the extracted `GorillaProtocol-Rebuild` folder:
+
+```bash
+tar -xzf GorillaProtocol-Rebuild.tar.gz
+cd GorillaProtocol-Rebuild
+bash gorilla-protocol/Scripts/install_offline_copy.sh
+```
 
 ```bash
 cd "$HOME/Projects/gorilla-protocol"
