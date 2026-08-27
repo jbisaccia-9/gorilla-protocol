@@ -17,7 +17,18 @@ if [[ -d "$DEST_ROOT" ]] && [[ -n "$(find "$DEST_ROOT" -mindepth 1 -maxdepth 1 -
 fi
 
 mkdir -p "$DEST_ROOT"
-cp -a "$SOURCE_ROOT/." "$DEST_ROOT/"
+(
+  cd "$SOURCE_ROOT"
+  env COPYFILE_DISABLE=1 tar \
+    --exclude='._*' \
+    --exclude='*/._*' \
+    --exclude='.DS_Store' \
+    --exclude='*/.DS_Store' \
+    -cf - .
+) | (
+  cd "$DEST_ROOT"
+  env COPYFILE_DISABLE=1 tar -xf -
+)
 
 cd "$DEST_ROOT"
 if command -v git-lfs >/dev/null 2>&1; then
