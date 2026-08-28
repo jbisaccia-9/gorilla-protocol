@@ -1,0 +1,16 @@
+GORILLA PROTOCOL - LINUX PLAYABLE BUILD
+=======================================
+
+1. Attach this drive to the Linux PC with Unreal Engine 5.8.1.
+2. Open the GORILLA_PROTOCOL folder in the file manager.
+3. Right-click inside the folder and choose "Open in Terminal".
+4. Run exactly this:
+
+   bash START_GORILLA_ON_LINUX.sh
+
+The launcher installs a clean, commit-specific project copy and handles compile,
+asset import, map creation, validation, and game launch. Do not open any other
+README and do not build directly on the flash drive.
+
+First build time depends on Unreal shader and C++ caches. Later launches reuse the
+installed project. If the script stops, photograph the last 30 terminal lines.
