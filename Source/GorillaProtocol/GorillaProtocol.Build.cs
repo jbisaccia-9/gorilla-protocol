@@ -11,8 +11,11 @@ public class GorillaProtocol : ModuleRules
             "Core",
             "CoreUObject",
             "Engine",
+            "InputCore",
             "EnhancedInput",
             "GameplayTags",
+            "AIModule",
+            "NavigationSystem",
             "UMG"
         });
     }

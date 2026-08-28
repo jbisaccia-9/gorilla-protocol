@@ -1,2 +1,74 @@
 AssetPath,Creator,Source,License,RedistributionRights,ProofLocation,VoiceConsent,TrademarkReview,Notes
 Docs/Art/vertical-slice-visual-target.png,OpenAI image generation,Project-directed original concept,Project concept reference,Yes,Conversation generation record,N/A,Approved,Owner-approved visual direction on 2026-08-27; not a production texture or model
+RawContent/Kenney/Characters/characterMedium.fbx,Kenney,https://kenney.nl/assets/animated-characters-retro,CC0 1.0,Yes,RawContent/Kenney/Characters/License.txt,N/A,Approved,Animated guard base mesh
+RawContent/Kenney/Characters/idle.fbx,Kenney,https://kenney.nl/assets/animated-characters-retro,CC0 1.0,Yes,RawContent/Kenney/Characters/License.txt,N/A,Approved,Guard idle animation
+RawContent/Kenney/Characters/run.fbx,Kenney,https://kenney.nl/assets/animated-characters-retro,CC0 1.0,Yes,RawContent/Kenney/Characters/License.txt,N/A,Approved,Guard run animation
+RawContent/Kenney/Characters/jump.fbx,Kenney,https://kenney.nl/assets/animated-characters-retro,CC0 1.0,Yes,RawContent/Kenney/Characters/License.txt,N/A,Approved,Guard jump animation
+RawContent/Kenney/Characters/humanMaleA.png,Kenney,https://kenney.nl/assets/animated-characters-retro,CC0 1.0,Yes,RawContent/Kenney/Characters/License.txt,N/A,Approved,Guard color texture
+RawContent/Kenney/Weapons/blaster-n.fbx,Kenney,https://kenney.nl/assets/blaster-kit,CC0 1.0,Yes,RawContent/Kenney/Weapons/License.txt,N/A,Approved,Suppressed sidearm base mesh
+RawContent/Kenney/Weapons/silencer-small.fbx,Kenney,https://kenney.nl/assets/blaster-kit,CC0 1.0,Yes,RawContent/Kenney/Weapons/License.txt,N/A,Approved,Sidearm suppressor mesh
+RawContent/Kenney/Weapons/colormap.png,Kenney,https://kenney.nl/assets/blaster-kit,CC0 1.0,Yes,RawContent/Kenney/Weapons/License.txt,N/A,Approved,Weapon color texture
+RawContent/Kenney/Weapons/Preview.png,Kenney,https://kenney.nl/assets/blaster-kit,CC0 1.0,Yes,RawContent/Kenney/Weapons/License.txt,N/A,Approved,Source pack preview
+RawContent/Kenney/Environment/Building/border-high.fbx,Kenney,https://kenney.nl/assets/building-kit,CC0 1.0,Yes,RawContent/Kenney/Environment/Building/License.txt,N/A,Approved,Facility railing module
+RawContent/Kenney/Environment/Building/column-wide.fbx,Kenney,https://kenney.nl/assets/building-kit,CC0 1.0,Yes,RawContent/Kenney/Environment/Building/License.txt,N/A,Approved,Facility column module
+RawContent/Kenney/Environment/Building/detail-pipe.fbx,Kenney,https://kenney.nl/assets/building-kit,CC0 1.0,Yes,RawContent/Kenney/Environment/Building/License.txt,N/A,Approved,Facility pipe prop
+RawContent/Kenney/Environment/Building/floor.fbx,Kenney,https://kenney.nl/assets/building-kit,CC0 1.0,Yes,RawContent/Kenney/Environment/Building/License.txt,N/A,Approved,Facility floor module
+RawContent/Kenney/Environment/Building/plating-detailed-wide.fbx,Kenney,https://kenney.nl/assets/building-kit,CC0 1.0,Yes,RawContent/Kenney/Environment/Building/License.txt,N/A,Approved,Facility detail module
+RawContent/Kenney/Environment/Building/roof-flat-center.fbx,Kenney,https://kenney.nl/assets/building-kit,CC0 1.0,Yes,RawContent/Kenney/Environment/Building/License.txt,N/A,Approved,Facility roof module
+RawContent/Kenney/Environment/Building/stairs-open.fbx,Kenney,https://kenney.nl/assets/building-kit,CC0 1.0,Yes,RawContent/Kenney/Environment/Building/License.txt,N/A,Approved,Facility stair module
+RawContent/Kenney/Environment/Building/wall-doorway-wide-square.fbx,Kenney,https://kenney.nl/assets/building-kit,CC0 1.0,Yes,RawContent/Kenney/Environment/Building/License.txt,N/A,Approved,Facility doorway module
+RawContent/Kenney/Environment/Building/wall-window-wide-square-detailed.fbx,Kenney,https://kenney.nl/assets/building-kit,CC0 1.0,Yes,RawContent/Kenney/Environment/Building/License.txt,N/A,Approved,Facility window module
+RawContent/Kenney/Environment/Building/wall.fbx,Kenney,https://kenney.nl/assets/building-kit,CC0 1.0,Yes,RawContent/Kenney/Environment/Building/License.txt,N/A,Approved,Facility wall module
+RawContent/Kenney/Environment/Industrial/building-q.fbx,Kenney,https://kenney.nl/assets/city-kit-industrial,CC0 1.0,Yes,RawContent/Kenney/Environment/Industrial/License.txt,N/A,Approved,Background industrial building
+RawContent/Kenney/Environment/Industrial/building-r.fbx,Kenney,https://kenney.nl/assets/city-kit-industrial,CC0 1.0,Yes,RawContent/Kenney/Environment/Industrial/License.txt,N/A,Approved,Background industrial building
+RawContent/Kenney/Environment/Industrial/chimney-large.fbx,Kenney,https://kenney.nl/assets/city-kit-industrial,CC0 1.0,Yes,RawContent/Kenney/Environment/Industrial/License.txt,N/A,Approved,Communications silhouette prop
+RawContent/Kenney/Environment/Industrial/detail-tank.fbx,Kenney,https://kenney.nl/assets/city-kit-industrial,CC0 1.0,Yes,RawContent/Kenney/Environment/Industrial/License.txt,N/A,Approved,Facility tank prop
+RawContent/Kenney/Environment/Industrial/variation-a.png,Kenney,https://kenney.nl/assets/city-kit-industrial,CC0 1.0,Yes,RawContent/Kenney/Environment/Industrial/License.txt,N/A,Approved,Industrial source texture
+RawContent/Gorilla/gorilla_male.blend,Micket,https://opengameart.org/content/gorilla-male,CC0 1.0,Yes,OpenGameArt listing,N/A,Approved,Original low-poly gorilla source retained for later remesh
+RawContent/PolyHaven/limehouse_4k.exr,Andreas Mischok,https://polyhaven.com/a/limehouse,CC0 1.0,Yes,Poly Haven asset page,N/A,Approved,Maritime environment lighting source
+RawContent/PolyHaven/Concrete/concrete_diff_1k.jpg,Rob Tuytel,https://polyhaven.com/a/concrete,CC0 1.0,Yes,Poly Haven asset page,N/A,Approved,Concrete base-color map
+RawContent/PolyHaven/Concrete/concrete_nor_dx_1k.png,Rob Tuytel,https://polyhaven.com/a/concrete,CC0 1.0,Yes,Poly Haven asset page,N/A,Approved,Concrete DirectX normal map
+RawContent/PolyHaven/Concrete/concrete_arm_1k.png,Rob Tuytel,https://polyhaven.com/a/concrete,CC0 1.0,Yes,Poly Haven asset page,N/A,Approved,Concrete packed AO roughness metallic map
+RawContent/Audio/Italian/mission_start.wav,Project-generated,eSpeak NG offline synthesis from project-authored Italian dialogue,Project-generated audio,Yes,Scripts/generate_italian_voice.sh,Synthetic voice,Approved,Bruno mission-start line
+RawContent/Audio/Italian/spotted.wav,Project-generated,eSpeak NG offline synthesis from project-authored Italian dialogue,Project-generated audio,Yes,Scripts/generate_italian_voice.sh,Synthetic voice,Approved,Bruno spotted line
+RawContent/Audio/Italian/banana.wav,Project-generated,eSpeak NG offline synthesis from project-authored Italian dialogue,Project-generated audio,Yes,Scripts/generate_italian_voice.sh,Synthetic voice,Approved,Bruno contextual line
+RawContent/Audio/Italian/hurt.wav,Project-generated,eSpeak NG offline synthesis from project-authored Italian dialogue,Project-generated audio,Yes,Scripts/generate_italian_voice.sh,Synthetic voice,Approved,Bruno damage line
+RawContent/Audio/Italian/objective.wav,Project-generated,eSpeak NG offline synthesis from project-authored Italian dialogue,Project-generated audio,Yes,Scripts/generate_italian_voice.sh,Synthetic voice,Approved,Bruno objective line
+RawContent/Audio/Italian/complete.wav,Project-generated,eSpeak NG offline synthesis from project-authored Italian dialogue,Project-generated audio,Yes,Scripts/generate_italian_voice.sh,Synthetic voice,Approved,Bruno completion line
+RawContent/Audio/Italian/punch.wav,Project-generated,eSpeak NG offline synthesis from project-authored Italian dialogue,Project-generated audio,Yes,Scripts/generate_italian_voice.sh,Synthetic voice,Approved,Bruno melee line
+Content/GorillaProtocol/Maps/L_ScimmiaDiMare.umap,Project-authored,Scripts/Unreal/bootstrap_playable.py,Project source,Yes,Git history,N/A,Approved,Generated playable mission shell
+Content/GorillaProtocol/Environment/Modular/SM_border_high.uasset,Kenney,Derived from Building Kit,CC0 1.0,Yes,RawContent/Kenney/Environment/Building/License.txt,N/A,Approved,Facility module
+Content/GorillaProtocol/Environment/Modular/SM_column_wide.uasset,Kenney,Derived from Building Kit,CC0 1.0,Yes,RawContent/Kenney/Environment/Building/License.txt,N/A,Approved,Facility module
+Content/GorillaProtocol/Environment/Modular/SM_detail_pipe.uasset,Kenney,Derived from Building Kit,CC0 1.0,Yes,RawContent/Kenney/Environment/Building/License.txt,N/A,Approved,Facility module
+Content/GorillaProtocol/Environment/Modular/SM_floor.uasset,Kenney,Derived from Building Kit,CC0 1.0,Yes,RawContent/Kenney/Environment/Building/License.txt,N/A,Approved,Facility module
+Content/GorillaProtocol/Environment/Modular/SM_plating_detailed_wide.uasset,Kenney,Derived from Building Kit,CC0 1.0,Yes,RawContent/Kenney/Environment/Building/License.txt,N/A,Approved,Facility module
+Content/GorillaProtocol/Environment/Modular/SM_roof_flat_center.uasset,Kenney,Derived from Building Kit,CC0 1.0,Yes,RawContent/Kenney/Environment/Building/License.txt,N/A,Approved,Facility module
+Content/GorillaProtocol/Environment/Modular/SM_stairs_open.uasset,Kenney,Derived from Building Kit,CC0 1.0,Yes,RawContent/Kenney/Environment/Building/License.txt,N/A,Approved,Facility module
+Content/GorillaProtocol/Environment/Modular/SM_wall_doorway_wide_square.uasset,Kenney,Derived from Building Kit,CC0 1.0,Yes,RawContent/Kenney/Environment/Building/License.txt,N/A,Approved,Facility module
+Content/GorillaProtocol/Environment/Modular/SM_wall_window_wide_square_detailed.uasset,Kenney,Derived from Building Kit,CC0 1.0,Yes,RawContent/Kenney/Environment/Building/License.txt,N/A,Approved,Facility module
+Content/GorillaProtocol/Environment/Modular/SM_wall.uasset,Kenney,Derived from Building Kit,CC0 1.0,Yes,RawContent/Kenney/Environment/Building/License.txt,N/A,Approved,Facility module
+Content/GorillaProtocol/Environment/Modular/SM_building_q.uasset,Kenney,Derived from City Kit Industrial,CC0 1.0,Yes,RawContent/Kenney/Environment/Industrial/License.txt,N/A,Approved,Background facility mesh
+Content/GorillaProtocol/Environment/Modular/SM_building_r.uasset,Kenney,Derived from City Kit Industrial,CC0 1.0,Yes,RawContent/Kenney/Environment/Industrial/License.txt,N/A,Approved,Background facility mesh
+Content/GorillaProtocol/Environment/Modular/SM_chimney_large.uasset,Kenney,Derived from City Kit Industrial,CC0 1.0,Yes,RawContent/Kenney/Environment/Industrial/License.txt,N/A,Approved,Communications prop
+Content/GorillaProtocol/Environment/Modular/SM_detail_tank.uasset,Kenney,Derived from City Kit Industrial,CC0 1.0,Yes,RawContent/Kenney/Environment/Industrial/License.txt,N/A,Approved,Facility prop
+Content/GorillaProtocol/Environment/Textures/concrete_diff_1k.uasset,Rob Tuytel,Derived from Poly Haven Concrete,CC0 1.0,Yes,Poly Haven asset page,N/A,Approved,Concrete base-color texture
+Content/GorillaProtocol/Environment/Textures/concrete_nor_dx_1k.uasset,Rob Tuytel,Derived from Poly Haven Concrete,CC0 1.0,Yes,Poly Haven asset page,N/A,Approved,Concrete normal texture
+Content/GorillaProtocol/Environment/Textures/concrete_arm_1k.uasset,Rob Tuytel,Derived from Poly Haven Concrete,CC0 1.0,Yes,Poly Haven asset page,N/A,Approved,Concrete packed texture
+Content/GorillaProtocol/Characters/Guards/SK_Guard.uasset,Kenney,Derived from RawContent/Kenney/Characters/characterMedium.fbx,CC0 1.0,Yes,RawContent/Kenney/Characters/License.txt,N/A,Approved,Imported guard mesh
+Content/GorillaProtocol/Characters/Guards/AN_GuardIdle.uasset,Kenney,Derived from RawContent/Kenney/Characters/idle.fbx,CC0 1.0,Yes,RawContent/Kenney/Characters/License.txt,N/A,Approved,Imported guard animation
+Content/GorillaProtocol/Characters/Guards/AN_GuardRun.uasset,Kenney,Derived from RawContent/Kenney/Characters/run.fbx,CC0 1.0,Yes,RawContent/Kenney/Characters/License.txt,N/A,Approved,Imported guard animation
+Content/GorillaProtocol/Characters/Guards/AN_GuardJump.uasset,Kenney,Derived from RawContent/Kenney/Characters/jump.fbx,CC0 1.0,Yes,RawContent/Kenney/Characters/License.txt,N/A,Approved,Imported guard animation
+Content/GorillaProtocol/Weapons/P9/SM_P9.uasset,Kenney,Derived from RawContent/Kenney/Weapons/blaster-n.fbx,CC0 1.0,Yes,RawContent/Kenney/Weapons/License.txt,N/A,Approved,Imported sidearm mesh
+Content/GorillaProtocol/Weapons/P9/SM_P9_Suppressor.uasset,Kenney,Derived from RawContent/Kenney/Weapons/silencer-small.fbx,CC0 1.0,Yes,RawContent/Kenney/Weapons/License.txt,N/A,Approved,Imported suppressor mesh
+Content/GorillaProtocol/Materials/M_BrunoFur.uasset,Project-authored,Scripts/Unreal/bootstrap_playable.py,Project source,Yes,Git history,N/A,Approved,Generated Bruno fur material
+Content/GorillaProtocol/Materials/M_WetDeck.uasset,Project-authored,Scripts/Unreal/bootstrap_playable.py,Project source,Yes,Git history,N/A,Approved,Generated wet deck material
+Content/GorillaProtocol/Materials/M_YachtConcrete.uasset,Project-authored,Scripts/Unreal/bootstrap_playable.py,Project source,Yes,Git history,N/A,Approved,Generated yacht material
+Content/GorillaProtocol/Materials/M_AlarmRed.uasset,Project-authored,Scripts/Unreal/bootstrap_playable.py,Project source,Yes,Git history,N/A,Approved,Generated alarm material
+Content/GorillaProtocol/Environment/HDRI/limehouse_4k.uasset,Andreas Mischok,Derived from RawContent/PolyHaven/limehouse_4k.exr,CC0 1.0,Yes,Poly Haven asset page,N/A,Approved,Imported maritime HDRI
+Content/GorillaProtocol/Audio/Bruno/mission_start.uasset,Project-generated,Derived from RawContent/Audio/Italian/mission_start.wav,Project-generated audio,Yes,Scripts/generate_italian_voice.sh,Synthetic voice,Approved,Imported Bruno dialogue
+Content/GorillaProtocol/Audio/Bruno/spotted.uasset,Project-generated,Derived from RawContent/Audio/Italian/spotted.wav,Project-generated audio,Yes,Scripts/generate_italian_voice.sh,Synthetic voice,Approved,Imported Bruno dialogue
+Content/GorillaProtocol/Audio/Bruno/banana.uasset,Project-generated,Derived from RawContent/Audio/Italian/banana.wav,Project-generated audio,Yes,Scripts/generate_italian_voice.sh,Synthetic voice,Approved,Imported Bruno dialogue
+Content/GorillaProtocol/Audio/Bruno/hurt.uasset,Project-generated,Derived from RawContent/Audio/Italian/hurt.wav,Project-generated audio,Yes,Scripts/generate_italian_voice.sh,Synthetic voice,Approved,Imported Bruno dialogue
+Content/GorillaProtocol/Audio/Bruno/objective.uasset,Project-generated,Derived from RawContent/Audio/Italian/objective.wav,Project-generated audio,Yes,Scripts/generate_italian_voice.sh,Synthetic voice,Approved,Imported Bruno dialogue
+Content/GorillaProtocol/Audio/Bruno/complete.uasset,Project-generated,Derived from RawContent/Audio/Italian/complete.wav,Project-generated audio,Yes,Scripts/generate_italian_voice.sh,Synthetic voice,Approved,Imported Bruno dialogue
+Content/GorillaProtocol/Audio/Bruno/punch.uasset,Project-generated,Derived from RawContent/Audio/Italian/punch.wav,Project-generated audio,Yes,Scripts/generate_italian_voice.sh,Synthetic voice,Approved,Imported Bruno dialogue

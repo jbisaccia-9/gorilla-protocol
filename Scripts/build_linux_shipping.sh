@@ -30,7 +30,9 @@ cd "${ROOT}"
 git lfs pull
 "${SETUP_TOOLCHAIN}"
 bash "${BUILD}" GorillaProtocolEditor Linux Development "${PROJECT}" -WaitMutex
+"${ROOT}/Scripts/bootstrap_playable.sh"
 "${ROOT}/Scripts/validate_project.sh"
+"${ROOT}/Scripts/validate_vertical_slice.sh"
 "${ROOT}/Scripts/package_linux.sh"
 
 ARCHIVE="${ROOT}/Artifacts/GorillaProtocol-Linux.tar.gz"

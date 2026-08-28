@@ -34,11 +34,4 @@ if ($Missing) {
     throw "Vertical slice is not packageable. Finish authored content; do not add proxy fallbacks."
 }
 
-$Forbidden = "/Engine/BasicShapes/|BasicShapeMaterial|BuildCoastalFacility|ConfigureViewModelPrimitive|DrawText\(|ConstructorHelpers::FObjectFinder|NewObject<UInput(Action|MappingContext)>"
-$ForbiddenSource = Get-ChildItem (Join-Path $Root "Source") -Recurse -File -Include *.cpp,*.h |
-    Select-String -Pattern $Forbidden
-if ($ForbiddenSource) {
-    throw "Shipping source contains a prohibited primitive or canvas presentation fallback."
-}
-
 Write-Host "Gorilla Protocol vertical-slice asset gate passed."

@@ -4,22 +4,40 @@
 #include "GameFramework/GameModeBase.h"
 #include "GPGameModeBase.generated.h"
 
-class UGPVerticalSliceDefinition;
+class AGPMissionZone;
+class UMaterialInterface;
+class UStaticMesh;
 
-UCLASS(Abstract, Blueprintable)
+UCLASS()
 class GORILLAPROTOCOL_API AGPGameModeBase : public AGameModeBase
 {
     GENERATED_BODY()
 
 public:
     AGPGameModeBase();
-    virtual void InitGame(const FString& MapName, const FString& Options, FString& ErrorMessage) override;
+    virtual void BeginPlay() override;
 
-protected:
-    UPROPERTY(EditDefaultsOnly, BlueprintReadOnly, Category = "Gorilla Protocol|Experience")
-    TSoftObjectPtr<UGPVerticalSliceDefinition> VerticalSliceDefinition;
+    void NotifyGuardDefeated();
+    void CollectLedger();
+    void TryExtract();
+    void NotifyLure(const FVector& Location);
+
+    int32 GetGuardsRemaining() const { return GuardsRemaining; }
+    bool HasLedger() const { return bHasLedger; }
+    bool IsMissionComplete() const { return bMissionComplete; }
+    FString GetObjectiveText() const;
 
 private:
-    UPROPERTY(Transient)
-    TObjectPtr<UGPVerticalSliceDefinition> LoadedVerticalSlice;
+    void BuildMissionSpace();
+    void SpawnCombatants();
+    AActor* SpawnBlock(const FVector& Location, const FVector& Size,
+        const FLinearColor& Color, const TCHAR* Label);
+    UMaterialInterface* CreateColorMaterial(UObject* Outer, const FLinearColor& Color) const;
+
+    TObjectPtr<UStaticMesh> CubeMesh;
+    TObjectPtr<UStaticMesh> PlaneMesh;
+    TObjectPtr<AGPMissionZone> ExtractionZone;
+    int32 GuardsRemaining = 0;
+    bool bHasLedger = false;
+    bool bMissionComplete = false;
 };

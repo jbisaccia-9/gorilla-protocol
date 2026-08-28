@@ -1,6 +1,15 @@
 # Third-Party Notices
 
-No third-party runtime assets or source distributions are currently vendored.
+The playable source bundle vendors these redistributable assets:
+
+- Kenney Animated Characters Retro, Blaster Kit, Building Kit, and City Kit
+  (Industrial) under CC0 1.0
+- Micket's Gorilla (male) source mesh under CC0 1.0
+- Andreas Mischok's Limehouse HDRI and Rob Tuytel's Concrete material from
+  Poly Haven under CC0 1.0
+
+Bruno's Italian dialogue is generated offline from project-authored text with
+eSpeak NG. No human voice likeness or recording is included.
 
 The optional browser-streaming deployment downloads or runs these components:
 

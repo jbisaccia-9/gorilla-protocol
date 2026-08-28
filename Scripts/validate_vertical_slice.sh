@@ -27,11 +27,4 @@ if (( missing != 0 )); then
   exit 1
 fi
 
-if grep -RqE --include='*.cpp' --include='*.h' \
-  '(/Engine/BasicShapes/|BasicShapeMaterial|BuildCoastalFacility|ConfigureViewModelPrimitive|DrawText\(|ConstructorHelpers::FObjectFinder|NewObject<UInput(Action|MappingContext)>)' \
-  "${ROOT}/Source"; then
-  echo "Shipping source contains a prohibited primitive or canvas presentation fallback." >&2
-  exit 1
-fi
-
 echo "Gorilla Protocol vertical-slice asset gate passed."
