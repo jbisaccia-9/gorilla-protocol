@@ -1,7 +1,7 @@
-#include "Game/GPGameModeBase.h"
+#include "GPGameModeBase.h"
 
-#include "Core/GPVerticalSliceDefinition.h"
-#include "GorillaProtocol.h"
+#include "../Core/GPVerticalSliceDefinition.h"
+#include "../GorillaProtocol.h"
 
 AGPGameModeBase::AGPGameModeBase()
 {
