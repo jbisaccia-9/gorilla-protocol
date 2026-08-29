@@ -150,9 +150,12 @@ void AGPGameModeBase::BuildMissionSpace()
         APointLight* Light = GetWorld()->SpawnActor<APointLight>(Position, FRotator::ZeroRotator);
         if (Light)
         {
-            Light->GetLightComponent()->SetIntensity(4800.0f);
-            Light->GetLightComponent()->SetAttenuationRadius(720.0f);
-            Light->GetLightComponent()->SetLightColor(FLinearColor(1.0f, 0.38f, 0.12f));
+            if (UPointLightComponent* PointLight = Cast<UPointLightComponent>(Light->GetLightComponent()))
+            {
+                PointLight->SetIntensity(4800.0f);
+                PointLight->SetAttenuationRadius(720.0f);
+                PointLight->SetLightColor(FLinearColor(1.0f, 0.38f, 0.12f));
+            }
         }
     }
 }
