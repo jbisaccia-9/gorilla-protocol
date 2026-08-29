@@ -9,7 +9,6 @@
 #include "Engine/ExponentialHeightFog.h"
 #include "Engine/PointLight.h"
 #include "Engine/PostProcessVolume.h"
-#include "Engine/SkyAtmosphere.h"
 #include "Engine/SkyLight.h"
 #include "Engine/StaticMesh.h"
 #include "Engine/StaticMeshActor.h"
@@ -113,7 +112,6 @@ void AGPGameModeBase::BuildMissionSpace()
         Moon->GetLightComponent()->SetCastShadows(true);
     }
 
-    GetWorld()->SpawnActor<ASkyAtmosphere>();
     ASkyLight* Sky = GetWorld()->SpawnActor<ASkyLight>();
     if (Sky)
     {

@@ -37,14 +37,28 @@ while IFS= read -r script; do
 done < <(find Scripts -type f -name '*.sh' -print)
 
 credential_pattern='(AKIA[0-9A-Z]{16}|ghp_[A-Za-z0-9]{20,}|github_pat_|-----BEGIN .*PRIVATE KEY|sk-[A-Za-z0-9_-]{20,})'
-if rg -n --hidden \
-  -g '!.git/**' -g '!RawContent/**' -g '!Content/**' -g '!archive/**' \
-  -g '*.cpp' -g '*.h' -g '*.cs' -g '*.py' -g '*.sh' -g '*.ps1' \
-  -g '*.ini' -g '*.json' -g '*.yml' -g '*.yaml' -g '*.md' -g '*.csv' \
-  -g '!**/validate_project.sh' \
-  "${credential_pattern}" .; then
-  echo "Potential credential found." >&2
-  exit 1
+if command -v rg >/dev/null 2>&1; then
+  if rg -n --hidden \
+    -g '!.git/**' -g '!RawContent/**' -g '!Content/**' -g '!archive/**' \
+    -g '*.cpp' -g '*.h' -g '*.cs' -g '*.py' -g '*.sh' -g '*.ps1' \
+    -g '*.ini' -g '*.json' -g '*.yml' -g '*.yaml' -g '*.md' -g '*.csv' \
+    -g '!**/validate_project.sh' \
+    "${credential_pattern}" .; then
+    echo "Potential credential found." >&2
+    exit 1
+  fi
+else
+  while IFS= read -r file; do
+    if grep -Eq "${credential_pattern}" "${file}"; then
+      echo "Potential credential found: ${file}" >&2
+      exit 1
+    fi
+  done < <(find . -type f \
+    \( -name '*.cpp' -o -name '*.h' -o -name '*.cs' -o -name '*.py' -o -name '*.sh' \
+    -o -name '*.ps1' -o -name '*.ini' -o -name '*.json' -o -name '*.yml' \
+    -o -name '*.yaml' -o -name '*.md' -o -name '*.csv' \) \
+    -not -path './.git/*' -not -path './RawContent/*' -not -path './Content/*' \
+    -not -path './archive/*' -not -path './Scripts/validate_project.sh')
 fi
 
 if grep -RqIE --include='*.cpp' --include='*.h' \
