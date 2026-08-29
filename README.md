@@ -1,67 +1,39 @@
-# Gorilla Protocol
+# Gorilla Protocol: Lyra Reset
 
-`Gorilla Protocol` is an original Unreal Engine 5.8 first-person spy-combat
-prototype. Bruno is a gorilla operative, speaks only Italian, carries a suppressed
-sidearm, and can use a sprinting knuckle rush or a spoken lure against guards.
+Gorilla Protocol is being rebuilt as an Unreal Engine 5.8 tactical-comedy FPS on
+top of Epic's official Lyra Starter Game. The previous generated graybox is
+archived at Git tag `pre-lyra-prototype-2026-08-28`; it is not the foundation for
+the new game and is not presented as playable.
 
-![Approved visual direction](Docs/Art/vertical-slice-visual-target.png)
+## Current Milestone
 
-The image above is concept art and the visual target, not an in-engine screenshot.
-The current build is a **playable combat slice**, not a PS5-quality finished game.
+Run the untouched Lyra Expanse shooter experience on the target Linux workstation.
+This establishes a proven baseline for locomotion, weapons, bots, damage, death,
+respawning, UI, audio, effects, match flow, stability, and performance before any
+Gorilla Protocol customization.
 
-## Build And Play On Linux
+Lyra is free, but its source and content must be acquired under the developer's
+Epic account and are not copied into this public repository.
 
-Use the Linux PC that already has Unreal Engine 5.8.1. From this repository run
-one command:
-
-```bash
-./Scripts/build_and_play_linux.sh
-```
-
-That command validates the source, compiles the Editor module, imports the bundled
-CC0 models/textures/audio, authors and saves the mission map, validates the
-generated assets, and launches the game directly. It does not require Java,
-Blender, Fab, an API key, or cloud access.
-
-Controls:
-
-- `WASD`: move
-- `Mouse`: look
-- `Left Shift`: sprint
-- `Left Mouse`: fire
-- `R`: reload
-- `F` or `Right Mouse`: punch; sprint first for Knuckle Rush
-- `E`: take the encrypted ledger
-- `Q`: speak Italian and lure unaware guards
-- `Space`: jump
-
-Mission: cross the storm-lit facility terrace, take the encrypted ledger from the
-red console, then return to the green extraction marker. Guards patrol, investigate
-Bruno's voice, pursue on sight, shoot, take damage, and can be knocked down.
-
-## Shipping Package
-
-After the local build has been played successfully:
+Once the complete `LyraStarterGame` folder is present on the Linux PC, run:
 
 ```bash
-./Scripts/build_linux_shipping.sh
+./Scripts/Lyra/build_and_play_baseline_linux.sh
 ```
 
-The package is written to `Artifacts/GorillaProtocol-Linux.tar.gz`. Do not deploy
-that archive until the local frame rate and gameplay have been accepted.
+The script automatically locates Unreal Engine and Lyra, verifies the ShooterCore
+and ShooterMaps installation, builds `LyraEditor`, and launches `L_Expanse` with
+frame and timing counters. Set `UE_ROOT` or `LYRA_ROOT` only if automatic discovery
+cannot find them.
 
-## Project Structure
+## Acceptance Standard
 
-- `Source/GorillaProtocol`: player, combat, guard AI, mission, and HUD C++
-- `Scripts/Unreal/bootstrap_playable.py`: deterministic asset import and map authoring
-- `RawContent`: redistributable CC0 source assets and project-generated Italian audio
-- `Licenses`: complete source and derived-asset provenance
-- `Docs`: approved direction and longer-term gameplay contract
-- `archive`: historical Java and WebGL iterations retained in this single repository
+[The playability gate](Docs/PLAYABILITY_GATE.md) is binding. The reset cannot move
+to gorilla art, Italian dialogue, or mission production until the official Lyra
+baseline completes three stable ten-minute sessions at the agreed performance
+target.
 
-Source validation is available separately with `./Scripts/validate_project.sh`.
-The generated-content gate is `./Scripts/validate_vertical_slice.sh`.
-
-The project has no runtime network calls, secrets, API credentials, personal data,
-or paid marketplace content. It is not affiliated with Nintendo, Rare, GoldenEye,
-James Bond, MGM, EON Productions, Sony, or Microsoft.
+The repository contains no Lyra assets, paid marketplace content, secrets, API
+credentials, or personal data. Gorilla Protocol is an original project and is not
+affiliated with Nintendo, Rare, GoldenEye, James Bond, MGM, EON Productions, Sony,
+Microsoft, or Epic Games.

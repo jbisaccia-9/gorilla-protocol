@@ -42,7 +42,7 @@ if command -v rg >/dev/null 2>&1; then
     -g '!.git/**' -g '!RawContent/**' -g '!Content/**' -g '!archive/**' \
     -g '*.cpp' -g '*.h' -g '*.cs' -g '*.py' -g '*.sh' -g '*.ps1' \
     -g '*.ini' -g '*.json' -g '*.yml' -g '*.yaml' -g '*.md' -g '*.csv' \
-    -g '!**/validate_project.sh' \
+    -g '!**/validate*.sh' \
     "${credential_pattern}" .; then
     echo "Potential credential found." >&2
     exit 1
@@ -58,7 +58,7 @@ else
     -o -name '*.ps1' -o -name '*.ini' -o -name '*.json' -o -name '*.yml' \
     -o -name '*.yaml' -o -name '*.md' -o -name '*.csv' \) \
     -not -path './.git/*' -not -path './RawContent/*' -not -path './Content/*' \
-    -not -path './archive/*' -not -path './Scripts/validate_project.sh')
+    -not -path './archive/*' -not -path './Scripts/validate*.sh')
 fi
 
 if grep -RqIE --include='*.cpp' --include='*.h' \
