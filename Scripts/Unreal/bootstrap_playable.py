@@ -32,13 +32,41 @@ def import_task(filename, destination, destination_name="", options=None):
 
 
 def require_imported_type(objects, asset_type, target):
-    for asset in objects:
-        if isinstance(asset, asset_type):
-            imported_path = asset.get_path_name().split(".")[0]
-            if imported_path != target:
-                raise RuntimeError(f"Expected {target}, imported {imported_path}")
+    existing = unreal.load_asset(target)
+    if isinstance(existing, asset_type):
+        return existing
+
+    candidates = [asset for asset in objects if isinstance(asset, asset_type)]
+    if not candidates:
+        raise RuntimeError(f"Import did not produce {asset_type.__name__}")
+
+    for asset in candidates:
+        if asset.get_path_name().split(".")[0] == target:
             return asset
-    raise RuntimeError(f"Import did not produce {asset_type.__name__}")
+
+    # Interchange can replace the requested FBX name with its internal take name.
+    # Prefer the actual clip over a one-frame targeting pose, then normalize its path.
+    preferred = [
+        asset for asset in candidates if "targeting_pose" not in asset.get_name().lower()
+    ]
+    if preferred:
+        candidates = preferred
+
+    def animation_length(asset):
+        try:
+            return float(asset.get_editor_property("play_length"))
+        except Exception:
+            return 0.0
+
+    candidate = max(candidates, key=animation_length)
+    imported_path = candidate.get_path_name().split(".")[0]
+    if not unreal.EditorAssetLibrary.rename_loaded_asset(candidate, target):
+        raise RuntimeError(f"Could not rename imported asset {imported_path} to {target}")
+
+    normalized = unreal.load_asset(target)
+    if not isinstance(normalized, asset_type):
+        raise RuntimeError(f"Renamed asset is not available at {target}")
+    return normalized
 
 
 def import_guard():
