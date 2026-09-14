@@ -1,0 +1,12 @@
+{
+  "camera_count": 3,
+  "light_count": 12,
+  "has_gorilla_hands": true,
+  "has_banana_charm": true,
+  "has_guard_alfa": true,
+  "has_guard_bravo": true,
+  "external_images": [],
+  "evaluated_triangles": 621916,
+  "gameplay_tested": false,
+  "unreal_tested": false
+}

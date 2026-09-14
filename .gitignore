@@ -22,3 +22,6 @@ Hosting/runtime/
 Hosting/gcp/gcp.env
 Hosting/gcp/runtime/
 archive/java-swing/out/
+__pycache__/
+*.blend1
+Art/**/build.log

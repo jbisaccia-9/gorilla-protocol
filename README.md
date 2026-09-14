@@ -7,6 +7,13 @@ the new game and is not presented as playable.
 
 ## Current Milestone
 
+The Blender coastal encounter is now being built on the Mac. Open
+`OPEN_COASTAL_SCENE.command` to inspect the generated `.blend`, or
+`BUILD_COASTAL_SCENE.command` to regenerate it. See [the art workspace](Art/README.md)
+for what is modeled and what remains before gameplay. This does not require Lyra.
+
+## Gameplay Baseline
+
 Run the untouched Lyra Expanse shooter experience on the target Linux workstation.
 This establishes a proven baseline for locomotion, weapons, bots, damage, death,
 respawning, UI, audio, effects, match flow, stability, and performance before any
@@ -28,10 +35,10 @@ cannot find them.
 
 ## Acceptance Standard
 
-[The playability gate](Docs/PLAYABILITY_GATE.md) is binding. The reset cannot move
-to gorilla art, Italian dialogue, or mission production until the official Lyra
-baseline completes three stable ten-minute sessions at the agreed performance
-target.
+[The playability gate](Docs/PLAYABILITY_GATE.md) is binding for gameplay acceptance.
+Blender art production can proceed independently on the Mac. Integration and a
+claim of playable gameplay still require the official Lyra baseline to complete
+three stable ten-minute sessions at the agreed performance target.
 
 The repository contains no Lyra assets, paid marketplace content, secrets, API
 credentials, or personal data. Gorilla Protocol is an original project and is not

@@ -3,6 +3,9 @@
 `Playable` means a complete, repeatable game loop. It does not mean that the
 project compiles, the editor opens, a map loads, or the player can move around.
 
+Blender art production may proceed before Gate A, per the September 14 request.
+Art renders do not pass or bypass the gameplay gates below.
+
 ## Gate A: Official Lyra Baseline
 
 The untouched Lyra `L_Expanse` experience must run on the target Linux PC before
