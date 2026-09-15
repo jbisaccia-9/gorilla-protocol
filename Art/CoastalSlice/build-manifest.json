@@ -2,8 +2,8 @@
   "status": "Blender art build; gameplay and Unreal integration unverified",
   "units": "meters",
   "coordinates": "Blender X right, Y forward, Z up",
-  "objects": 4401,
-  "materials": 50,
+  "objects": 4402,
+  "materials": 47,
   "camera": "PLAYER | Lower terrace",
   "map_extent_m": [
     20,
@@ -18,5 +18,6 @@
     "Import into Lyra",
     "Test collision and navigation",
     "Profile packaged gameplay"
-  ]
+  ],
+  "art_revision": 2
 }

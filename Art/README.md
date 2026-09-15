@@ -29,9 +29,23 @@ This navigates the art scene; it does not enable game logic or collisions.
 evaluated triangle count from the generated scene. PNGs are renders of that scene.
 Neither a successful render nor this report is a gameplay/performance approval.
 
-The first render has known art gaps: foliage silhouettes are too chunky, forearm
-hair is sparse, and the lighting has less depth and contrast than the approved
-reference. These must be improved before treating the scene as final-quality art.
+The second art pass replaces the chunky cypress outline with narrow foliage
+sprays, increases forearm fur to 52,000 clumps, and separates the cool exterior
+from the warm practical lighting. `encounter-preview.png` preserves the first
+pass; `encounter-refined.png` shows the updated scene. This remains work in progress:
+guard anatomy/animation, background clouds, material detail and engine performance
+still need review against the approved reference.
+
+The saved scene can be refined without rebuilding architecture or characters:
+
+```bash
+/Applications/Blender.app/Contents/MacOS/Blender -b \
+  Art/CoastalSlice/Gorilla_Coastal_Encounter.blend --python-exit-code 1 \
+  --python Scripts/Blender/refine_coastal_slice.py -- --render
+```
+
+The full build command also includes this refinement. Running the refinement
+again replaces its generated hair and foliage instead of accumulating copies.
 
 ## Remaining Game Work
 

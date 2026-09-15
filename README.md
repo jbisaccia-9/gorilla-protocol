@@ -12,6 +12,8 @@ The Blender coastal encounter is now being built on the Mac. Open
 `BUILD_COASTAL_SCENE.command` to regenerate it. See [the art workspace](Art/README.md)
 for what is modeled and what remains before gameplay. This does not require Lyra.
 
+![Blender art progress, not a gameplay screenshot](Art/CoastalSlice/encounter-refined.png)
+
 ## Gameplay Baseline
 
 Run the untouched Lyra Expanse shooter experience on the target Linux workstation.

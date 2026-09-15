@@ -6,7 +6,8 @@
   "has_guard_alfa": true,
   "has_guard_bravo": true,
   "external_images": [],
-  "evaluated_triangles": 621916,
+  "evaluated_triangles": 1302916,
   "gameplay_tested": false,
-  "unreal_tested": false
+  "unreal_tested": false,
+  "art_revision": 2
 }

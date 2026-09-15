@@ -592,16 +592,20 @@ def main():
             if area.type=="VIEW_3D":
                 area.spaces.active.region_3d.view_perspective="CAMERA"
                 area.spaces.active.shading.type="MATERIAL"
+    from refine_coastal_slice import refine
+    refinement = refine()
+    (OUT/"refinement-report.json").write_text(json.dumps(refinement,indent=2)+"\n")
     bpy.ops.wm.save_as_mainfile(filepath=str(OUT/"Gorilla_Coastal_Encounter.blend"))
     manifest={"status":"Blender art build; gameplay and Unreal integration unverified",
               "units":"meters", "coordinates":"Blender X right, Y forward, Z up",
               "objects":len(scene.objects),"materials":len(bpy.data.materials),
+              "art_revision":int(scene.get("coastal_art_revision",1)),
               "camera":"PLAYER | Lower terrace", "map_extent_m":[20,34],
               "routes":["Lower cliff terrace to central stairs","Sheltered arcade to archive door"],
               "required_next":["Bake and export materials","Import into Lyra","Test collision and navigation","Profile packaged gameplay"]}
     (OUT/"build-manifest.json").write_text(json.dumps(manifest,indent=2)+"\n")
     if not args.no_render:
-        scene.render.filepath=str(OUT/("environment-preview.png" if args.environment_only else "encounter-preview.png"))
+        scene.render.filepath=str(OUT/("environment-preview.png" if args.environment_only else "encounter-refined.png"))
         bpy.ops.render.render(write_still=True)
     print("COASTAL_ART_BUILD_COMPLETE",flush=True)
 

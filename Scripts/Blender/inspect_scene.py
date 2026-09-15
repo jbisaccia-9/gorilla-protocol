@@ -48,6 +48,13 @@ def main():
     checks["evaluated_triangles"] = triangles
     checks["gameplay_tested"] = False
     checks["unreal_tested"] = False
+    checks["art_revision"] = int(scene.get("coastal_art_revision", 1))
+    manifest_path = out / "build-manifest.json"
+    if manifest_path.exists():
+        manifest = json.loads(manifest_path.read_text())
+        manifest.update(objects=len(scene.objects), materials=len(bpy.data.materials),
+                        art_revision=checks["art_revision"])
+        manifest_path.write_text(json.dumps(manifest, indent=2)+"\n")
     (out / "scene-checks.json").write_text(json.dumps(checks, indent=2)+"\n")
     print("SCENE_CHECKS", json.dumps(checks), flush=True)
     if args.render:
