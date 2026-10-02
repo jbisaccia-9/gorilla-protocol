@@ -1,0 +1,23 @@
+{
+  "status": "Blender art build; gameplay and Unreal integration unverified",
+  "units": "meters",
+  "coordinates": "Blender X right, Y forward, Z up",
+  "objects": 4402,
+  "materials": 47,
+  "camera": "PLAYER | Lower terrace",
+  "map_extent_m": [
+    20,
+    34
+  ],
+  "routes": [
+    "Lower cliff terrace to central stairs",
+    "Sheltered arcade to archive door"
+  ],
+  "required_next": [
+    "Bake and export materials",
+    "Import into Lyra",
+    "Test collision and navigation",
+    "Profile packaged gameplay"
+  ],
+  "art_revision": 2
+}

@@ -1,0 +1,12 @@
+{
+  "revision": 2,
+  "cypress_spray_triangles": 422400,
+  "forearm_hair_clumps": 52000,
+  "gameplay_tested": false,
+  "changes": [
+    "needle foliage",
+    "denser fur",
+    "storm light contrast",
+    "guard framing"
+  ]
+}
