@@ -36,9 +36,10 @@ complete mission.
 
 ## Gate C: Mission Slice
 
-Only after Gate B passes do we build the five-to-ten-minute yacht mission: briefing,
-infiltration, one stealth/combat encounter, ledger objective, extraction, victory,
-defeat, checkpoint, and immediate replay.
+Only after Gate B passes do we build the five-to-ten-minute coastal-facility
+mission: briefing, infiltration, one stealth/combat encounter, ledger objective,
+extraction, victory, defeat, checkpoint, and immediate replay. The coastal setting
+supersedes the earlier yacht plan; see [the Linux handoff](LINUX_HANDOFF.md).
 
 No build is described as playable until all behaviors in its active gate have been
 demonstrated in a packaged local build.

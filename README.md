@@ -7,6 +7,11 @@ the new game and is not presented as playable.
 
 ## Current Milestone
 
+**Continuing on Linux or another device? Start with the
+[Linux handoff](Docs/LINUX_HANDOFF.md).** It records the current branch, asset
+recovery, remaining work, two-agent responsibilities, and usage-saving rules.
+Project files are recoverable from Git/LFS; chat history is not required.
+
 The Blender coastal encounter is now being built on the Mac. Open
 `OPEN_COASTAL_SCENE.command` to inspect the generated `.blend`, or
 `BUILD_COASTAL_SCENE.command` to regenerate it. See [the art workspace](Art/README.md)
