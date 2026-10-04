@@ -7,6 +7,10 @@ the new game and is not presented as playable.
 
 ## Current Milestone
 
+**Installing on Ubuntu? Follow [the Linux setup README](README_LINUX_SETUP.md).**
+It separates native Linux downloads from Mac-only Launcher/Lyra acquisition,
+includes transfer without a flash drive, and provides validation/launch commands.
+
 **Continuing on Linux or another device? Start with the
 [Linux handoff](Docs/LINUX_HANDOFF.md).** It records the current branch, asset
 recovery, remaining work, two-agent responsibilities, and usage-saving rules.

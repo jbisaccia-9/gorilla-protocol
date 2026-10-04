@@ -1,8 +1,15 @@
 # Linux Handoff: Start Here
 
-Updated 2026-10-02. This document preserves the project decisions and next actions
+Updated 2026-10-04. This document preserves the project decisions and next actions
 from the Mac conversation. It is not a claim that the full chat history transfers
 between devices. Read this before building or delegating work.
+
+For exact downloads, platform differences, prerequisites, private Lyra transfer,
+and launch commands, follow [the Linux setup README](../README_LINUX_SETUP.md).
+There is no supported native Ubuntu Epic Games Launcher in this workflow: acquire
+the native Linux engine directly, and acquire the Lyra sample through the Mac
+Launcher before transferring the complete project privately. Do not spend the
+setup budget trying to install a Windows/Mac launcher on Ubuntu.
 
 ## Verified Starting Point
 
